@@ -24,12 +24,13 @@ void WormBody::initTexture()
 void WormBody::initSprite()
 {
 	this->sprite.setTexture(this->texture);
+	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 
 void WormBody::initPosition(sf::Vector2f position, sf::Vector2f followPosition)
 {
-	this->sprite.setOrigin(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
-	this->sprite.setPosition(position.x + sprite.getTexture()->getSize().x * 0.5f, position.y + sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
 
 	this->setFollowPosition(followPosition);
 }
@@ -93,16 +94,6 @@ void WormBody::setSides(bool top, bool bottom, bool left, bool right)
 	this->bottomSide = bottom;
 	this->leftSide = left;
 	this->rightSide = right;
-}
-
-sf::Texture WormBody::createTexture(std::string path)
-{
-	sf::Texture texture;
-	if (!this->texture.loadFromFile("Textures/" + path))
-	{
-		std::cout << "ERROR > WormBody::setTexture::Could not load texture file." << "\n";
-	}
-	return texture;
 }
 
 void WormBody::updateRotation(bool top, bool bottom, bool left, bool right)

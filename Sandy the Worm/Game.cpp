@@ -5,6 +5,8 @@ void Game::initVariables()
 	this->window = nullptr;
 
 	this->endGame = false;
+
+	this->sandBlockIsSpawned = false;
 }
 
 void Game::initWindow()
@@ -15,6 +17,20 @@ void Game::initWindow()
 	this->window = new sf::RenderWindow(this->videoMode, "Sandy the Worm", sf::Style::Titlebar | sf::Style::Close);
 
 	this->window->setFramerateLimit(144);
+}
+
+void Game::initTexture()
+{
+	if (!this->groundTexture.loadFromFile("Textures/ground.png"))
+	{
+		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
+	}
+}
+
+void Game::initSprite()
+{
+	this->groundSprite.setTexture(this->groundTexture);
+	this->groundSprite.setPosition(sf::Vector2f(0.f, 480.f));;
 }
 
 void Game::initFonts()
@@ -32,13 +48,15 @@ void Game::initText()
 
 void Game::initWorm()
 {
-	this->worm = new Worm(320.f, 440.f);
+	this->worm = new Worm(sf::Vector2f(320.f, 440.f));
 }
 
 Game::Game()
 {
 	this->initVariables();
 	this->initWindow();
+	this->initTexture();
+	this->initSprite();
 	this->initFonts();
 	this->initText();
 	this->initWorm();
@@ -76,9 +94,105 @@ void Game::pollEvents()
 	}
 }
 
+void Game::spawnSandBlocks()
+{
+	bool topSide;
+	bool bottomSide;
+	bool leftSide;
+	bool rightSide;
+
+	unsigned i = 0;
+	while (i < 5)
+	{
+		unsigned j = 0;
+		while (j < 5)
+		{
+			if (this->mapSandBlocks[i][j] > 0)
+			{
+				topSide = false;
+				bottomSide = false;
+				leftSide = false;
+				rightSide = false;
+
+				//Top Side
+				if (this->checkValidValue(0, 5, i - 1))
+				{
+					if (this->mapSandBlocks[i - 1][j] == 0)
+					{
+						topSide = true;
+					}
+				}
+				else
+				{
+					topSide = true;
+				}
+
+				//Bottom Side
+				if (this->checkValidValue(0, 5, i + 1))
+				{
+					if (this->mapSandBlocks[i + 1][j] == 0)
+					{
+						bottomSide = true;
+					}
+				}
+				else
+				{
+					bottomSide = true;
+				}
+
+				//Left Side
+				if (this->checkValidValue(0, 5, j - 1))
+				{
+					if (this->mapSandBlocks[i][j - 1] == 0)
+					{
+						leftSide = true;
+					}
+				}
+				else
+				{
+					leftSide = true;
+				}
+
+				//Right Side
+				if (this->checkValidValue(0, 5, j + 1))
+				{
+					if (this->mapSandBlocks[i][j + 1] == 0)
+					{
+						rightSide = true;
+					}
+				}
+				else
+				{
+					rightSide = true;
+				}
+
+				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float)j * 40, (float)i * 40)));
+				this->sandBlocks.back()->setSides(topSide, bottomSide, leftSide, rightSide);
+			}
+			j++;
+		}
+		i++;
+	}
+
+	this->sandBlockIsSpawned = true;
+}
+
 void Game::updateWorm()
 {
 	this->worm->update();
+}
+
+void Game::updateSandBlocks()
+{
+	if (!this->sandBlockIsSpawned)
+	{
+		this->spawnSandBlocks();
+	}
+
+	for (SandBlock* sandBlock : this->sandBlocks)
+	{
+		sandBlock->update();
+	}
 }
 
 void Game::update()
@@ -93,7 +207,7 @@ void Game::update()
 
 		this->updateWorm();
 
-		//this->updateEnemies();
+		this->updateSandBlocks();
 	}
 }
 
@@ -102,9 +216,22 @@ void Game::renderGui(sf::RenderTarget& target)
 
 }
 
+void Game::renderGround(sf::RenderTarget& target)
+{
+	target.draw(this->groundSprite);
+}
+
 void Game::renderWorm(sf::RenderTarget& target)
 {
 	this->worm->render(target);
+}
+
+void Game::renderSandBlocks(sf::RenderTarget& target)
+{
+	for (SandBlock* sandBlock : this->sandBlocks)
+	{
+		sandBlock->render(target);
+	}
 }
 
 void Game::render()
@@ -113,7 +240,17 @@ void Game::render()
 
 	this->renderGui(*this->window);
 
+	this->renderGround(*this->window);
+
 	this->renderWorm(*this->window);
 
+	this->renderSandBlocks(*this->window);
+
 	this->window->display();
+}
+
+bool Game::checkValidValue(int aLimit, int bLimit, int value)
+{
+	if (value > aLimit && value < bLimit) return true;
+	else return false;
 }

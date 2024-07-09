@@ -9,14 +9,20 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
 
-class WormBody
+class SandBlock
 {
 private:
-	sf::Texture texture;
-	sf::Texture textureAngle;
+	sf::Texture texture,
+		textureTopLeft,
+		textureLeft,
+		textureBottomLeft,
+		textureBottom,
+		textureBottomRight,
+		textureRight,
+		textureTopRight,
+		textureTop,
+		textureTopBottomLeftRight;
 	sf::Sprite sprite;
-
-	sf::Vector2f followPosition;
 
 	bool topSide;
 	bool bottomSide;
@@ -26,17 +32,16 @@ private:
 	void initVariables();
 	void initTexture();
 	void initSprite();
-	void initPosition(sf::Vector2f position, sf::Vector2f followPosition);
+	void initPosition(sf::Vector2f position);
 
 public:
-	WormBody(sf::Vector2f position, sf::Vector2f followPosition);
-	virtual ~WormBody();
+	SandBlock(sf::Vector2f position);
+	virtual ~SandBlock();
 
 	//Accessors
 	sf::Sprite getSprite();
 	sf::Vector2f getPosition();
-	void moveSprite();
-	void setFollowPosition(sf::Vector2f followPosition);
+	void moveSprite(sf::Vector2f position);
 
 	//Functions
 	bool getTopSide();
@@ -45,7 +50,7 @@ public:
 	bool getRightSide();
 	void setSides(bool top, bool bottom, bool left, bool right);
 
-	void updateRotation(bool top, bool bottom, bool left, bool right);
+	void updateTexture(bool top, bool bottom, bool left, bool right);
 	void update();
 
 	void render(sf::RenderTarget& target);
