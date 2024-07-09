@@ -6,20 +6,82 @@ void Worm::initVariables()
 	this->keyHeldD = false;
 	this->keyHeldW = false;
 	this->keyHeldS = false;
+
+	this->wormPositions = { 
+		this->head->getPosition(),
+		this->bodyFirst->getPosition(),
+		this->bodySecond->getPosition(),
+		this->tail->getPosition() 
+	};
 }
 
-Worm::Worm(float x, float y)
+Worm::Worm(sf::Vector2f spawnPosition)
 {
+	this->head = new WormHead(spawnPosition);
+	this->bodyFirst = new WormBody(sf::Vector2f(spawnPosition.x + 40.f, spawnPosition.y), sf::Vector2f(spawnPosition.x + 20.f, spawnPosition.y + 20.f));
+	this->bodySecond = new WormBody(sf::Vector2f(spawnPosition.x + 80.f, spawnPosition.y), sf::Vector2f(spawnPosition.x + 60.f, spawnPosition.y + 20.f));
+	this->tail = new WormTail(sf::Vector2f(spawnPosition.x + 120.f, spawnPosition.y), sf::Vector2f(spawnPosition.x + 100.f, spawnPosition.y + 20.f));
 	this->initVariables();
-	this->head = new WormHead(sf::Vector2f(320.f, 440.f));
-	this->bodyFirst = new WormBody(sf::Vector2f(360.f, 440.f), sf::Vector2f(340.f, 460.f));
-	this->bodySecond = new WormBody(sf::Vector2f(400.f, 440.f), sf::Vector2f(380.f, 460.f));
-	this->tail = new WormTail(sf::Vector2f(440.f, 440.f), sf::Vector2f(420.f, 460.f));
 }
 
 Worm::~Worm()
 {
 
+}
+
+void Worm::resetKeys()
+{
+	this->keyHeldA = false;
+	this->keyHeldD = false;
+	this->keyHeldW = false;
+	this->keyHeldS = false;
+}
+
+void Worm::resetWormPositions()
+{
+	this->wormPositions = {
+		this->head->getPosition(),
+		this->bodyFirst->getPosition(),
+		this->bodySecond->getPosition(),
+		this->tail->getPosition()
+	};
+}
+
+bool Worm::wormCanMove(sf::Vector2f futurePosition)
+{
+	bool canMove = true;
+	this->resetWormPositions();
+
+	if (futurePosition == this->bodyFirst->getPosition())
+	{
+		canMove = false;
+	}
+
+	if (futurePosition.y > 480.f)
+	{
+		canMove = false;
+	}
+
+	/*...
+	std::cout << "futX " << futurePosition.x << " " << this->bodyFirst->getPosition().x << " " << this->bodySecond->getPosition().x << " " << this->tail->getPosition().x << "\n";
+	std::cout << "futY " << futurePosition.y << " " << this->bodyFirst->getPosition().y << " " << this->bodySecond->getPosition().y << " " << this->tail->getPosition().y << "\n\n";
+	...*/
+	/*...*/
+	std::cout << "X " << wormPositions[0].x << " " << wormPositions[1].x << " " << wormPositions[2].x << " " << wormPositions[3].x << "\n";
+	std::cout << "Y " << wormPositions[0].y << " " << wormPositions[1].y << " " << wormPositions[2].y << " " << wormPositions[3].y << "\n";
+	/*...*/
+
+	unsigned i = 0;
+	for (sf::Vector2f pos : this->wormPositions)
+	{
+		if (futurePosition.x == pos.x) i++;
+
+		if (i == 4) {
+			if (futurePosition.y < this->wormPositions[3].y) canMove = false;
+		}
+	}
+
+	return canMove;
 }
 
 void Worm::moveWorm()
@@ -39,11 +101,15 @@ void Worm::updateInput()
 		if (!keyHeldA)
 		{
 			this->keyHeldA = true;
-			this->head->moveSprite(sf::Vector2f(- 40.f, 0.f));
-			this->head->setSides(true, true, true, false);
-			this->moveWorm();
-			
-			std::cout << "A" << "\n";
+			sf::Vector2f movePosition(-40.f, 0.f);
+			if (this->wormCanMove(this->head->getPosition() + movePosition))
+			{
+				this->head->moveSprite(movePosition);
+				this->head->setSides(true, true, true, false);
+				this->moveWorm();
+
+				std::cout << "A" << "\n";
+			}
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -51,11 +117,15 @@ void Worm::updateInput()
 		if (!keyHeldD)
 		{
 			this->keyHeldD = true;
-			this->head->moveSprite(sf::Vector2f(40.f, 0.f));
-			this->head->setSides(true, true, false, true);
-			this->moveWorm();
+			sf::Vector2f movePosition(40.f, 0.f);
+			if (this->wormCanMove(this->head->getPosition() + movePosition))
+			{
+				this->head->moveSprite(movePosition);
+				this->head->setSides(true, true, false, true);
+				this->moveWorm();
 
-			std::cout << "D" << "\n";
+				std::cout << "D" << "\n";
+			}
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -63,11 +133,15 @@ void Worm::updateInput()
 		if (!keyHeldW)
 		{
 			this->keyHeldW = true;
-			this->head->moveSprite(sf::Vector2f(0.f, -40.f));
-			this->head->setSides(true, false, true, true);
-			this->moveWorm();
+			sf::Vector2f movePosition(0.f, -40.f);
+			if (this->wormCanMove(this->head->getPosition() + movePosition))
+			{
+				this->head->moveSprite(movePosition);
+				this->head->setSides(true, false, true, true);
+				this->moveWorm();
 
-			std::cout << "W" << "\n";
+				std::cout << "W" << "\n";
+			}
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -75,14 +149,18 @@ void Worm::updateInput()
 		if (!keyHeldS)
 		{
 			this->keyHeldS = true;
-			this->head->moveSprite(sf::Vector2f(0.f, 40.f));
-			this->head->setSides(false, true, true, true);
-			this->moveWorm();
+			sf::Vector2f movePosition(0.f, 40.f);
+			if (this->wormCanMove(this->head->getPosition() + movePosition))
+			{
+				this->head->moveSprite(movePosition);
+				this->head->setSides(false, true, true, true);
+				this->moveWorm();
 
-			std::cout << "S" << "\n";
+				std::cout << "S" << "\n";
+			}
 		}
 	}
-	else initVariables();
+	else resetKeys();
 }
 
 void Worm::updateWorm()
@@ -91,6 +169,13 @@ void Worm::updateWorm()
 	this->bodyFirst->update();
 	this->bodySecond->update();
 	this->tail->update();
+}
+
+void Worm::updateFall()
+{
+	bool wormIsFall = false;
+
+	//if (this->head->getPosition().y - 40.f == )
 }
 
 template<class T, class N, class K> void Worm::updateBodySides(T firstPartWorm, N secondPartWorm, K thridPartWorm)
@@ -151,6 +236,7 @@ void Worm::update()
 {
 	this->updateInput();
 	this->updateWorm();
+	this->updateFall();
 	this->updateBodySides(this->bodyFirst, this->head, this->bodySecond);
 	this->updateBodySides(this->bodySecond, this->bodyFirst, this->tail);
 	this->updateTailSides(*this->tail);

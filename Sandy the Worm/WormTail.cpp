@@ -19,12 +19,13 @@ void WormTail::initTexture()
 void WormTail::initSprite()
 {
 	this->sprite.setTexture(this->texture);
+	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 
 void WormTail::initPosition(sf::Vector2f position, sf::Vector2f followPosition)
 {
-	this->sprite.setOrigin(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
-	this->sprite.setPosition(position.x + sprite.getTexture()->getSize().x * 0.5f, position.y + sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
 
 	this->setFollowPosition(followPosition);
 }
