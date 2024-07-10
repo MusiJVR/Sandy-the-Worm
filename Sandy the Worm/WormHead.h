@@ -29,7 +29,7 @@ public:
 	//Accessors
 	sf::Sprite getSprite();
 	sf::Vector2f getPosition();
-	void moveSprite(sf::Vector2f position);
+	void moveSprite(sf::Vector2f movePosition);
 
 	//Functions
 	bool getTopSide();

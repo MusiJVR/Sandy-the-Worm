@@ -51,9 +51,9 @@ sf::Vector2f WormHead::getPosition()
 	return this->sprite.getPosition();
 }
 
-void WormHead::moveSprite(sf::Vector2f position)
+void WormHead::moveSprite(sf::Vector2f movePosition)
 {
-	this->sprite.move(position);
+	this->sprite.move(movePosition);
 }
 
 bool WormHead::getTopSide()

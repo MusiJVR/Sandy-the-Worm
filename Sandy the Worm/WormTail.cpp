@@ -27,7 +27,7 @@ void WormTail::initPosition(sf::Vector2f position, sf::Vector2f followPosition)
 	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
 	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
 
-	this->setFollowPosition(followPosition);
+	this->resetFollowPosition(followPosition);
 }
 
 WormTail::WormTail(sf::Vector2f position, sf::Vector2f followPosition)
@@ -53,12 +53,17 @@ sf::Vector2f WormTail::getPosition()
 	return this->sprite.getPosition();
 }
 
-void WormTail::moveSprite()
+void WormTail::moveSprite(sf::Vector2f movePosition)
+{
+	this->sprite.move(movePosition);
+}
+
+void WormTail::setFollowPosition()
 {
 	this->sprite.setPosition(this->followPosition);
 }
 
-void WormTail::setFollowPosition(sf::Vector2f followPosition)
+void WormTail::resetFollowPosition(sf::Vector2f followPosition)
 {
 	this->followPosition = followPosition;
 }

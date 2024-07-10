@@ -1,5 +1,9 @@
 #pragma once
 
+#include <chrono>
+#include <ctime>
+#include <iostream>
+#include <thread>
 #include <vector>
 
 #include "WormHead.h"
@@ -14,7 +18,9 @@ private:
 	WormBody* bodySecond;
 	WormTail* tail;
 
-	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
+	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS, wormFalls;
+
+	unsigned fallCounter;
 
 	std::vector<sf::Vector2f> wormPositions;
 
@@ -31,10 +37,16 @@ public:
 	//Functions
 	bool wormCanMove(sf::Vector2f futurePosition);
 	void moveWorm();
+	bool getFallValue();
+	void setFallValue(bool value);
+	void wormFall();
+	WormHead* getWormHead();
+	WormBody* getWormBodyFirst();
+	WormBody* getWormBodySecond();
+	WormTail* getWormTail();
 
 	void updateInput();
 	void updateWorm();
-	void updateFall();
 	template<class T, class N, class K> void updateBodySides(T firstPartWorm, N secondPartWorm, K thridPartWorm);
 	void updateTailSides(WormTail& partWorm);
 	void update();

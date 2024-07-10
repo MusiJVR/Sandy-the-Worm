@@ -31,8 +31,9 @@ public:
 	//Accessors
 	sf::Sprite getSprite();
 	sf::Vector2f getPosition();
-	void moveSprite();
-	void setFollowPosition(sf::Vector2f followPosition);
+	void moveSprite(sf::Vector2f movePosition);
+	void setFollowPosition();
+	void resetFollowPosition(sf::Vector2f followPosition);
 
 	//Functions
 	bool getTopSide();

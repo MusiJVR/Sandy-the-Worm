@@ -20,7 +20,7 @@ void Game::initWindow()
 
 	this->window = new sf::RenderWindow(this->videoMode, "Sandy the Worm", sf::Style::Titlebar | sf::Style::Close);
 
-	this->window->setFramerateLimit(144);
+	this->window->setFramerateLimit(60);
 }
 
 void Game::initTexture()
@@ -199,6 +199,66 @@ void Game::updateSandBlocks()
 	}
 }
 
+void Game::updateFall()
+{
+	if (!this->worm->getFallValue())
+	{
+		bool wormIsFall = false;
+
+		if (this->worm->getWormHead()->getPosition().y != 460.f
+			&& this->worm->getWormBodyFirst()->getPosition().y != 460.f
+			&& this->worm->getWormBodySecond()->getPosition().y != 460.f
+			&& this->worm->getWormTail()->getPosition().y != 460.f)
+		{
+			for (SandBlock* sandBlock : this->sandBlocks)
+			{
+
+				//std::cout << "sand " << sandBlock->getPosition().x << " " << sandBlock->getPosition().y << "\n";
+				//std::cout << "head " << this->worm->getWormHead()->getPosition().x << " " << this->worm->getWormHead()->getPosition().y << "\n";
+				//std::cout << this->worm->getWormBodyFirst()->getPosition().x << " " << this->worm->getWormBodyFirst()->getPosition().y << "\n";
+				//std::cout << this->worm->getWormBodySecond()->getPosition().x << " " << this->worm->getWormBodySecond()->getPosition().y << "\n";
+				//std::cout << this->worm->getWormTail()->getPosition().x << " " << this->worm->getWormTail()->getPosition().y << "\n";
+
+				if ((this->worm->getWormHead()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormHead()->getPosition().x == sandBlock->getPosition().x))
+				{
+					wormIsFall = false;
+					break;
+				}
+				else if (((this->worm->getWormBodyFirst()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == sandBlock->getPosition().x))
+					|| ((this->worm->getWormBodyFirst()->getPosition().y - 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == sandBlock->getPosition().x))
+					|| ((this->worm->getWormBodyFirst()->getPosition().x + 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == sandBlock->getPosition().y))
+					|| ((this->worm->getWormBodyFirst()->getPosition().x - 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == sandBlock->getPosition().y)))
+				{
+					wormIsFall = false;
+					break;
+				}
+				else if (((this->worm->getWormBodySecond()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == sandBlock->getPosition().x))
+					|| ((this->worm->getWormBodySecond()->getPosition().y - 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == sandBlock->getPosition().x))
+					|| ((this->worm->getWormBodySecond()->getPosition().x + 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == sandBlock->getPosition().y))
+					|| ((this->worm->getWormBodySecond()->getPosition().x - 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == sandBlock->getPosition().y)))
+				{
+					wormIsFall = false;
+					break;
+				}
+				else if ((this->worm->getWormTail()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormTail()->getPosition().x == sandBlock->getPosition().x))
+				{
+					wormIsFall = false;
+					break;
+				}
+				else
+				{
+					wormIsFall = true;
+				}
+			}
+		}
+
+		if (wormIsFall)
+		{
+			this->worm->setFallValue(true);
+		}
+	}
+}
+
 void Game::update()
 {
 	this->pollEvents();
@@ -212,6 +272,8 @@ void Game::update()
 		this->updateWorm();
 
 		this->updateSandBlocks();
+
+		this->updateFall();
 	}
 }
 
