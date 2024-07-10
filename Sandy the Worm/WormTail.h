@@ -17,10 +17,7 @@ private:
 
 	sf::Vector2f followPosition;
 
-	bool topSide;
-	bool bottomSide;
-	bool leftSide;
-	bool rightSide;
+	bool topSide, bottomSide, leftSide, rightSide;
 
 	void initVariables();
 	void initTexture();

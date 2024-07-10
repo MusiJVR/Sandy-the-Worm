@@ -50,9 +50,6 @@
     <ClInclude Include="WormBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WormTile.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="WormTail.h">
       <Filter>Header Files</Filter>
     </ClInclude>

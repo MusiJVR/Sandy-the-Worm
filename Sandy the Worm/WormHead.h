@@ -15,10 +15,7 @@ private:
 	sf::Texture texture;
 	sf::Sprite sprite;
 
-	bool topSide;
-	bool bottomSide;
-	bool leftSide;
-	bool rightSide;
+	bool topSide, bottomSide, leftSide, rightSide;
 
 	void initVariables();
 	void initTexture();

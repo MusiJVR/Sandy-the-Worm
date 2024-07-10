@@ -12,16 +12,12 @@
 class WormBody
 {
 private:
-	sf::Texture texture;
-	sf::Texture textureAngle;
+	sf::Texture texture, textureAngle;
 	sf::Sprite sprite;
 
 	sf::Vector2f followPosition;
 
-	bool topSide;
-	bool bottomSide;
-	bool leftSide;
-	bool rightSide;
+	bool topSide, bottomSide, leftSide, rightSide;
 
 	void initVariables();
 	void initTexture();

@@ -14,10 +14,7 @@ private:
 	WormBody* bodySecond;
 	WormTail* tail;
 
-	bool keyHeldA;
-	bool keyHeldD;
-	bool keyHeldW;
-	bool keyHeldS;
+	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
 
 	std::vector<sf::Vector2f> wormPositions;
 

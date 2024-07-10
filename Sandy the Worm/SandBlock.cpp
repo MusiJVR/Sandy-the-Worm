@@ -55,6 +55,36 @@ void SandBlock::initTexture()
 		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
 	}
 
+	if (!this->textureTopBottom.loadFromFile("Textures/sand_block_top_bottom.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->textureLeftRight.loadFromFile("Textures/sand_block_left_right.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->textureTopBottomLeft.loadFromFile("Textures/sand_block_top_bottom_left.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->textureTopBottomRight.loadFromFile("Textures/sand_block_top_bottom_right.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->textureTopLeftRight.loadFromFile("Textures/sand_block_top_left_right.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->textureBottomLeftRight.loadFromFile("Textures/sand_block_bottom_left_right.png"))
+	{
+		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+	}
+
 	if (!this->textureTopBottomLeftRight.loadFromFile("Textures/sand_block_top_bottom_left_right.png"))
 	{
 		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
@@ -167,10 +197,35 @@ void SandBlock::updateTexture(bool top, bool bottom, bool left, bool right)
 	{
 		this->sprite.setTexture(this->textureTop);
 	}
+	else if (top && bottom && !left && !right)
+	{
+		this->sprite.setTexture(this->textureTopBottom);
+	}
+	else if (!top && !bottom && left && right)
+	{
+		this->sprite.setTexture(this->textureLeftRight);
+	}
+	else if (top && bottom && left && !right)
+	{
+		this->sprite.setTexture(this->textureTopBottomLeft);
+	}
+	else if (top && bottom && !left && right)
+	{
+		this->sprite.setTexture(this->textureTopBottomRight);
+	}
+	else if (top && !bottom && left && right)
+	{
+		this->sprite.setTexture(this->textureTopLeftRight);
+	}
+	else if (!top && bottom && left && right)
+	{
+		this->sprite.setTexture(this->textureBottomLeftRight);
+	}
 	else if (top && bottom && left && right)
 	{
 		this->sprite.setTexture(this->textureTopBottomLeftRight);
 	}
+
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 

@@ -7,6 +7,10 @@ void Game::initVariables()
 	this->endGame = false;
 
 	this->sandBlockIsSpawned = false;
+
+	this->heightMap = 12;
+
+	this->widthMap = 20;
 }
 
 void Game::initWindow()
@@ -102,10 +106,10 @@ void Game::spawnSandBlocks()
 	bool rightSide;
 
 	unsigned i = 0;
-	while (i < 5)
+	while (i < this->heightMap)
 	{
 		unsigned j = 0;
-		while (j < 5)
+		while (j < this->widthMap)
 		{
 			if (this->mapSandBlocks[i][j] > 0)
 			{
@@ -115,7 +119,7 @@ void Game::spawnSandBlocks()
 				rightSide = false;
 
 				//Top Side
-				if (this->checkValidValue(0, 5, i - 1))
+				if (this->checkValidValue(0, this->heightMap, i - 1))
 				{
 					if (this->mapSandBlocks[i - 1][j] == 0)
 					{
@@ -128,7 +132,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Bottom Side
-				if (this->checkValidValue(0, 5, i + 1))
+				if (this->checkValidValue(0, this->heightMap, i + 1))
 				{
 					if (this->mapSandBlocks[i + 1][j] == 0)
 					{
@@ -141,7 +145,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Left Side
-				if (this->checkValidValue(0, 5, j - 1))
+				if (this->checkValidValue(0, this->widthMap, j - 1))
 				{
 					if (this->mapSandBlocks[i][j - 1] == 0)
 					{
@@ -154,7 +158,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Right Side
-				if (this->checkValidValue(0, 5, j + 1))
+				if (this->checkValidValue(0, this->widthMap, j + 1))
 				{
 					if (this->mapSandBlocks[i][j + 1] == 0)
 					{

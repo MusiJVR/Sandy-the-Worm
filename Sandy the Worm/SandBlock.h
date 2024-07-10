@@ -21,13 +21,16 @@ private:
 		textureRight,
 		textureTopRight,
 		textureTop,
+		textureTopBottom,
+		textureLeftRight,
+		textureTopBottomLeft,
+		textureTopBottomRight,
+		textureTopLeftRight,
+		textureBottomLeftRight,
 		textureTopBottomLeftRight;
 	sf::Sprite sprite;
 
-	bool topSide;
-	bool bottomSide;
-	bool leftSide;
-	bool rightSide;
+	bool topSide, bottomSide, leftSide, rightSide;
 
 	void initVariables();
 	void initTexture();

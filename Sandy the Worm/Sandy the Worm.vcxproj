@@ -142,7 +142,6 @@
     <ClInclude Include="WormBody.h" />
     <ClInclude Include="WormHead.h" />
     <ClInclude Include="WormTail.h" />
-    <ClInclude Include="WormTile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
