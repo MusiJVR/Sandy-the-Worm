@@ -18,7 +18,7 @@ private:
 	WormBody* bodySecond;
 	WormTail* tail;
 
-	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS, wormFalls;
+	bool wormFalls;
 
 	unsigned fallCounter;
 
@@ -31,7 +31,6 @@ public:
 	virtual ~Worm();
 
 	//Accessors
-	void resetKeys();
 	void resetWormPositions();
 
 	//Functions
@@ -45,7 +44,6 @@ public:
 	WormBody* getWormBodySecond();
 	WormTail* getWormTail();
 
-	void updateInput();
 	void updateWorm();
 	template<class T, class N, class K> void updateBodySides(T firstPartWorm, N secondPartWorm, K thridPartWorm);
 	void updateTailSides(WormTail& partWorm);

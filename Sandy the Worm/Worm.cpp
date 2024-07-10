@@ -2,10 +2,6 @@
 
 void Worm::initVariables()
 {
-	this->keyHeldA = false;
-	this->keyHeldD = false;
-	this->keyHeldW = false;
-	this->keyHeldS = false;
 	this->wormFalls = false;
 
 	this->fallCounter = 0;
@@ -30,14 +26,6 @@ Worm::Worm(sf::Vector2f spawnPosition)
 Worm::~Worm()
 {
 
-}
-
-void Worm::resetKeys()
-{
-	this->keyHeldA = false;
-	this->keyHeldD = false;
-	this->keyHeldW = false;
-	this->keyHeldS = false;
 }
 
 void Worm::resetWormPositions()
@@ -145,78 +133,6 @@ WormTail* Worm::getWormTail()
 	return this->tail;
 }
 
-void Worm::updateInput()
-{
-	if (!this->wormFalls)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		{
-			if (!keyHeldA)
-			{
-				this->keyHeldA = true;
-				sf::Vector2f movePosition(-40.f, 0.f);
-				if (this->wormCanMove(this->head->getPosition() + movePosition))
-				{
-					this->head->moveSprite(movePosition);
-					this->head->setSides(true, true, true, false);
-					this->moveWorm();
-
-					std::cout << "A" << "\n";
-				}
-			}
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		{
-			if (!keyHeldD)
-			{
-				this->keyHeldD = true;
-				sf::Vector2f movePosition(40.f, 0.f);
-				if (this->wormCanMove(this->head->getPosition() + movePosition))
-				{
-					this->head->moveSprite(movePosition);
-					this->head->setSides(true, true, false, true);
-					this->moveWorm();
-
-					std::cout << "D" << "\n";
-				}
-			}
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		{
-			if (!keyHeldW)
-			{
-				this->keyHeldW = true;
-				sf::Vector2f movePosition(0.f, -40.f);
-				if (this->wormCanMove(this->head->getPosition() + movePosition))
-				{
-					this->head->moveSprite(movePosition);
-					this->head->setSides(true, false, true, true);
-					this->moveWorm();
-
-					std::cout << "W" << "\n";
-				}
-			}
-		}
-		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		{
-			if (!keyHeldS)
-			{
-				this->keyHeldS = true;
-				sf::Vector2f movePosition(0.f, 40.f);
-				if (this->wormCanMove(this->head->getPosition() + movePosition))
-				{
-					this->head->moveSprite(movePosition);
-					this->head->setSides(false, true, true, true);
-					this->moveWorm();
-
-					std::cout << "S" << "\n";
-				}
-			}
-		}
-		else resetKeys();
-	}
-}
-
 void Worm::updateWorm()
 {
 	this->head->update();
@@ -293,7 +209,6 @@ void Worm::updateTailSides(WormTail& partWorm)
 
 void Worm::update()
 {
-	this->updateInput();
 	this->updateWorm();
 	this->updateBodySides(this->bodyFirst, this->head, this->bodySecond);
 	this->updateBodySides(this->bodySecond, this->bodyFirst, this->tail);

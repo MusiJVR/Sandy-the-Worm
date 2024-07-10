@@ -17,6 +17,8 @@ private:
 
 	Worm* worm;
 
+	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
+
 	bool endGame;
 	bool sandBlockIsSpawned;
 
@@ -62,6 +64,7 @@ public:
 
 	//Accessors
 	const bool& getEndGame() const;
+	void resetKeys();
 
 	//Modifiers
 
@@ -70,6 +73,7 @@ public:
 	void pollEvents();
 
 	void spawnSandBlocks();
+	void updateInput();
 	void updateGui();
 	void updateWorm();
 	void updateSandBlocks();

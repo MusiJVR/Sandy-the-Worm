@@ -76,6 +76,14 @@ const bool& Game::getEndGame() const
 	return this->endGame;
 }
 
+void Game::resetKeys()
+{
+	this->keyHeldA = false;
+	this->keyHeldD = false;
+	this->keyHeldW = false;
+	this->keyHeldS = false;
+}
+
 const bool Game::getWindowIsOpen() const
 {
 	return this->window->isOpen();
@@ -181,6 +189,78 @@ void Game::spawnSandBlocks()
 	this->sandBlockIsSpawned = true;
 }
 
+void Game::updateInput()
+{
+	if (!this->worm->getFallValue())
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		{
+			if (!this->keyHeldA)
+			{
+				this->keyHeldA = true;
+				sf::Vector2f movePosition(-40.f, 0.f);
+				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				{
+					this->worm->getWormHead()->moveSprite(movePosition);
+					this->worm->getWormHead()->setSides(true, true, true, false);
+					this->worm->moveWorm();
+
+					std::cout << "A" << "\n";
+				}
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		{
+			if (!this->keyHeldD)
+			{
+				this->keyHeldD = true;
+				sf::Vector2f movePosition(40.f, 0.f);
+				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				{
+					this->worm->getWormHead()->moveSprite(movePosition);
+					this->worm->getWormHead()->setSides(true, true, false, true);
+					this->worm->moveWorm();
+
+					std::cout << "D" << "\n";
+				}
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		{
+			if (!this->keyHeldW)
+			{
+				this->keyHeldW = true;
+				sf::Vector2f movePosition(0.f, -40.f);
+				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				{
+					this->worm->getWormHead()->moveSprite(movePosition);
+					this->worm->getWormHead()->setSides(true, false, true, true);
+					this->worm->moveWorm();
+
+					std::cout << "W" << "\n";
+				}
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		{
+			if (!this->keyHeldS)
+			{
+				this->keyHeldS = true;
+				sf::Vector2f movePosition(0.f, 40.f);
+				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				{
+					this->worm->getWormHead()->moveSprite(movePosition);
+					this->worm->getWormHead()->setSides(false, true, true, true);
+					this->worm->moveWorm();
+
+					std::cout << "S" << "\n";
+				}
+			}
+		}
+		else this->resetKeys();
+	}
+}
+
 void Game::updateWorm()
 {
 	this->worm->update();
@@ -268,6 +348,8 @@ void Game::update()
 	if (!this->endGame)
 	{
 		//this->updateMousePositions();
+
+		this->updateInput();
 
 		this->updateWorm();
 
