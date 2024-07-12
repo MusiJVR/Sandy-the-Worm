@@ -6,6 +6,10 @@ void SandBlock::initVariables()
 	this->bottomSide = false;
 	this->leftSide = false;
 	this->rightSide = false;
+
+	this->sandBlockFalls = false;
+
+	this->fallCounter = 0;
 }
 
 void SandBlock::initTexture()
@@ -131,6 +135,21 @@ void SandBlock::moveSprite(sf::Vector2f position)
 	this->sprite.move(position);
 }
 
+void SandBlock::sandBlockFall()
+{
+	this->moveSprite(sf::Vector2f(0.f, 4.f));
+}
+
+bool SandBlock::getFallValue()
+{
+	return this->sandBlockFalls;
+}
+
+void SandBlock::setFallValue(bool value)
+{
+	this->sandBlockFalls = value;
+}
+
 bool SandBlock::getTopSide()
 {
 	return this->topSide;
@@ -232,6 +251,18 @@ void SandBlock::updateTexture(bool top, bool bottom, bool left, bool right)
 void SandBlock::update()
 {
 	this->updateTexture(this->getTopSide(), this->getBottomSide(), this->getLeftSide(), this->getRightSide());
+
+	if (this->sandBlockFalls)
+	{
+		this->sandBlockFall();
+
+		this->fallCounter++;
+		if (this->fallCounter >= 10)
+		{
+			this->fallCounter = 0;
+			this->sandBlockFalls = false;
+		}
+	}
 }
 
 void SandBlock::render(sf::RenderTarget& target)

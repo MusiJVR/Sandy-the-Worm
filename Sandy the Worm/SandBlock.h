@@ -30,7 +30,9 @@ private:
 		textureTopBottomLeftRight;
 	sf::Sprite sprite;
 
-	bool topSide, bottomSide, leftSide, rightSide;
+	bool topSide, bottomSide, leftSide, rightSide, sandBlockFalls;
+
+	unsigned fallCounter;
 
 	void initVariables();
 	void initTexture();
@@ -47,6 +49,9 @@ public:
 	void moveSprite(sf::Vector2f position);
 
 	//Functions
+	void sandBlockFall();
+	bool getFallValue();
+	void setFallValue(bool value);
 	bool getTopSide();
 	bool getBottomSide();
 	bool getLeftSide();

@@ -1,9 +1,5 @@
 #pragma once
 
-#include <chrono>
-#include <ctime>
-#include <iostream>
-#include <thread>
 #include <vector>
 
 #include "WormHead.h"
@@ -32,10 +28,10 @@ public:
 
 	//Accessors
 	void resetWormPositions();
+	void moveWorm();
 
 	//Functions
 	bool wormCanMove(sf::Vector2f futurePosition);
-	void moveWorm();
 	bool getFallValue();
 	void setFallValue(bool value);
 	void wormFall();

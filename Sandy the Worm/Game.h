@@ -29,10 +29,12 @@ private:
 	sf::Texture groundTexture;
 	sf::Sprite groundSprite;
 
-	unsigned heightMap;
-	unsigned widthMap;
+	int heightMap;
+	int widthMap;
 
-	int mapSandBlocks[12][20]{
+	std::vector<std::vector<int>> mapSandBlocks;
+
+	/*int mapSandBlocks[12][20]{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -45,7 +47,7 @@ private:
 		{0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	};
+	};*/
 
 	std::vector<SandBlock*> sandBlocks;
 
@@ -71,6 +73,7 @@ public:
 	//Functions
 	const bool getWindowIsOpen() const;
 	void pollEvents();
+	bool getSandBlocksFallValues();
 
 	void spawnSandBlocks();
 	void updateInput();

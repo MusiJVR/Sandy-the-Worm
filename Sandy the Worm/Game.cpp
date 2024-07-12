@@ -8,9 +8,17 @@ void Game::initVariables()
 
 	this->sandBlockIsSpawned = false;
 
-	this->heightMap = 12;
+	this->heightMap = 5;
 
-	this->widthMap = 20;
+	this->widthMap = 5;
+
+	this->mapSandBlocks = {
+		{0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0},
+		{0, 0, 1, 0, 0},
+		{0, 0, 1, 0, 0},
+		{0, 0, 0, 0, 1}
+	};
 }
 
 void Game::initWindow()
@@ -106,18 +114,27 @@ void Game::pollEvents()
 	}
 }
 
+bool Game::getSandBlocksFallValues()
+{
+	for (SandBlock* sandBlock : this->sandBlocks)
+	{
+		if (sandBlock->getFallValue()) return true;
+	}
+	return false;
+}
+
 void Game::spawnSandBlocks()
 {
+	std::cout << this->mapSandBlocks[0][1] << "\n";
+
 	bool topSide;
 	bool bottomSide;
 	bool leftSide;
 	bool rightSide;
 
-	unsigned i = 0;
-	while (i < this->heightMap)
+	for (int i = 0; i < this->heightMap; i++)
 	{
-		unsigned j = 0;
-		while (j < this->widthMap)
+		for (int j = 0; j < this->widthMap; j++)
 		{
 			if (this->mapSandBlocks[i][j] > 0)
 			{
@@ -127,7 +144,7 @@ void Game::spawnSandBlocks()
 				rightSide = false;
 
 				//Top Side
-				if (this->checkValidValue(0, this->heightMap, i - 1))
+				if (this->checkValidValue(0, this->heightMap - 1, i - 1))
 				{
 					if (this->mapSandBlocks[i - 1][j] == 0)
 					{
@@ -140,7 +157,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Bottom Side
-				if (this->checkValidValue(0, this->heightMap, i + 1))
+				if (this->checkValidValue(0, this->heightMap - 1, i + 1))
 				{
 					if (this->mapSandBlocks[i + 1][j] == 0)
 					{
@@ -153,7 +170,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Left Side
-				if (this->checkValidValue(0, this->widthMap, j - 1))
+				if (this->checkValidValue(0, this->widthMap - 1, j - 1))
 				{
 					if (this->mapSandBlocks[i][j - 1] == 0)
 					{
@@ -166,7 +183,7 @@ void Game::spawnSandBlocks()
 				}
 
 				//Right Side
-				if (this->checkValidValue(0, this->widthMap, j + 1))
+				if (this->checkValidValue(0, this->widthMap - 1, j + 1))
 				{
 					if (this->mapSandBlocks[i][j + 1] == 0)
 					{
@@ -178,12 +195,10 @@ void Game::spawnSandBlocks()
 					rightSide = true;
 				}
 
-				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float)j * 40, (float)i * 40)));
+				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float) (j) * 40.f, (float) (i) * 40.f)));
 				this->sandBlocks.back()->setSides(topSide, bottomSide, leftSide, rightSide);
 			}
-			j++;
 		}
-		i++;
 	}
 
 	this->sandBlockIsSpawned = true;
@@ -191,7 +206,7 @@ void Game::spawnSandBlocks()
 
 void Game::updateInput()
 {
-	if (!this->worm->getFallValue())
+	if (!this->worm->getFallValue() && !this->getSandBlocksFallValues())
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -337,6 +352,42 @@ void Game::updateFall()
 			this->worm->setFallValue(true);
 		}
 	}
+
+	for (SandBlock* sandBlock : this->sandBlocks)
+	{
+		if (!sandBlock->getFallValue())
+		{
+			bool sandBlockIsFall = false;
+
+			for (SandBlock* sandBlock2 : this->sandBlocks)
+			{
+				if (sandBlock->getPosition().y != 460.f)
+				{
+					if (((sandBlock->getPosition().y + 40.f == sandBlock2->getPosition().y) && (sandBlock->getPosition().x == sandBlock2->getPosition().x))
+						|| ((sandBlock->getPosition().y - 40.f == sandBlock2->getPosition().y) && (sandBlock->getPosition().x == sandBlock2->getPosition().x))
+						|| ((sandBlock->getPosition().x + 40.f == sandBlock2->getPosition().x) && (sandBlock->getPosition().y == sandBlock2->getPosition().y))
+						|| ((sandBlock->getPosition().x - 40.f == sandBlock2->getPosition().x) && (sandBlock->getPosition().y == sandBlock2->getPosition().y))
+						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormHead()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormHead()->getPosition().x))
+						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodyFirst()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodyFirst()->getPosition().x))
+						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodySecond()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodySecond()->getPosition().x))
+						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormTail()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormTail()->getPosition().x)))
+					{
+						sandBlockIsFall = false;
+						break;
+					}
+					else
+					{
+						sandBlockIsFall = true;
+					}
+				}
+			}
+
+			if (sandBlockIsFall)
+			{
+				sandBlock->setFallValue(true);
+			}
+		}
+	}
 }
 
 void Game::update()
@@ -399,6 +450,6 @@ void Game::render()
 
 bool Game::checkValidValue(int aLimit, int bLimit, int value)
 {
-	if (value > aLimit && value < bLimit) return true;
+	if (value >= aLimit && value <= bLimit) return true;
 	else return false;
 }

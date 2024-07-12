@@ -38,6 +38,16 @@ void Worm::resetWormPositions()
 	};
 }
 
+void Worm::moveWorm()
+{
+	this->bodyFirst->setFollowPosition();
+	this->bodyFirst->resetFollowPosition(this->head->getPosition());
+	this->bodySecond->setFollowPosition();
+	this->bodySecond->resetFollowPosition(this->bodyFirst->getPosition());
+	this->tail->setFollowPosition();
+	this->tail->resetFollowPosition(this->bodySecond->getPosition());
+}
+
 bool Worm::wormCanMove(sf::Vector2f futurePosition)
 {
 	bool canMove = true;
@@ -75,16 +85,6 @@ bool Worm::wormCanMove(sf::Vector2f futurePosition)
 	}*/
 
 	return canMove;
-}
-
-void Worm::moveWorm()
-{
-	this->bodyFirst->setFollowPosition();
-	this->bodyFirst->resetFollowPosition(this->head->getPosition());
-	this->bodySecond->setFollowPosition();
-	this->bodySecond->resetFollowPosition(this->bodyFirst->getPosition());
-	this->tail->setFollowPosition();
-	this->tail->resetFollowPosition(this->bodySecond->getPosition());
 }
 
 bool Worm::getFallValue()
