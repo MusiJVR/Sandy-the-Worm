@@ -8,16 +8,12 @@ void Game::initVariables()
 
 	this->sandBlockIsSpawned = false;
 
-	this->heightMap = 5;
-
-	this->widthMap = 5;
-
 	this->mapSandBlocks = {
 		{0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0},
-		{0, 0, 1, 0, 0},
-		{0, 0, 1, 0, 0},
-		{0, 0, 0, 0, 1}
+		{0, 1, 1, 1, 0},
+		{0, 1, 1, 1, 0},
+		{0, 1, 1, 1, 0}
 	};
 }
 
@@ -123,80 +119,98 @@ bool Game::getSandBlocksFallValues()
 	return false;
 }
 
+bool Game::getSandBlockSide(bool side, int i, int j, int sizeMap, int axis)
+{
+	if (this->checkValidValue(0, sizeMap - 1, axis))
+	{
+		if (this->mapSandBlocks[i][j] == 0)
+		{
+			side = true;
+		}
+	}
+	else
+	{
+		side = true;
+	}
+	return side;
+}
+
+void Game::dfs(int i, int j, const std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks)
+{
+	int rows = mapSandBlocks.size();
+	int cols = mapSandBlocks[0].size();
+
+	if (i < 0 || i >= rows || j < 0 || j >= cols || mapSandBlocks[i][j] == 0 || supportedSandBlocks[i][j]) {
+		return;
+	}
+
+	supportedSandBlocks[i][j] = true;
+
+	this->dfs(i + 1, j, mapSandBlocks, supportedSandBlocks);
+	this->dfs(i - 1, j, mapSandBlocks, supportedSandBlocks);
+	this->dfs(i, j + 1, mapSandBlocks, supportedSandBlocks);
+	this->dfs(i, j - 1, mapSandBlocks, supportedSandBlocks);
+}
+
+void Game::setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks)
+{
+	int rows = mapSandBlocks.size();
+	int cols = mapSandBlocks[0].size();
+
+	supportedSandBlocks = std::vector<std::vector<bool>>(rows, std::vector<bool>(cols, false));
+
+	for (int j = 0; j < cols; j++) {
+		if (mapSandBlocks[rows - 1][j] == 1) {
+			this->dfs(rows - 1, j, mapSandBlocks, supportedSandBlocks);
+		}
+	}
+
+	for (SandBlock* sandBlock : this->sandBlocks)
+	{
+		if (((sandBlock->getPosition().y + 40.f == this->worm->getWormHead()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormHead()->getPosition().x))
+			|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodyFirst()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodyFirst()->getPosition().x))
+			|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodySecond()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodySecond()->getPosition().x))
+			|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormTail()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormTail()->getPosition().x)))
+		{
+			int i = (((int)sandBlock->getPosition().y - 20) / 40) - 7;
+			int j = (((int)sandBlock->getPosition().x - 20) / 40) - 1;
+			this->dfs(i, j, mapSandBlocks, supportedSandBlocks);
+		}
+	}
+}
+
+void Game::dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks)
+{
+	int rows = mapSandBlocks.size();
+	int cols = mapSandBlocks[0].size();
+
+	for (int j = 0; j < cols; ++j) {
+		for (int i = rows - 1; i >= 0; --i) {
+			if (mapSandBlocks[i][j] == 1 && !supportedSandBlocks[i][j]) {
+				mapSandBlocks[i + 1][j] = 1;
+				mapSandBlocks[i][j] = 0;
+				for (SandBlock* sandBlock : this->sandBlocks)
+				{
+					if (sandBlock->getPosition() == sf::Vector2f((float)(((j + 1) * 40.f) + 20.f), (float)(((i + 7) * 40.f) + 20.f)))
+					{
+						sandBlock->setFallValue(true);
+					}
+				}
+			}
+		}
+	}
+}
+
 void Game::spawnSandBlocks()
 {
-	std::cout << this->mapSandBlocks[0][1] << "\n";
-
-	bool topSide;
-	bool bottomSide;
-	bool leftSide;
-	bool rightSide;
-
-	for (int i = 0; i < this->heightMap; i++)
+	for (int i = 0; i < this->mapSandBlocks.size(); i++)
 	{
-		for (int j = 0; j < this->widthMap; j++)
+		for (int j = 0; j < this->mapSandBlocks[0].size(); j++)
 		{
 			if (this->mapSandBlocks[i][j] > 0)
 			{
-				topSide = false;
-				bottomSide = false;
-				leftSide = false;
-				rightSide = false;
-
-				//Top Side
-				if (this->checkValidValue(0, this->heightMap - 1, i - 1))
-				{
-					if (this->mapSandBlocks[i - 1][j] == 0)
-					{
-						topSide = true;
-					}
-				}
-				else
-				{
-					topSide = true;
-				}
-
-				//Bottom Side
-				if (this->checkValidValue(0, this->heightMap - 1, i + 1))
-				{
-					if (this->mapSandBlocks[i + 1][j] == 0)
-					{
-						bottomSide = true;
-					}
-				}
-				else
-				{
-					bottomSide = true;
-				}
-
-				//Left Side
-				if (this->checkValidValue(0, this->widthMap - 1, j - 1))
-				{
-					if (this->mapSandBlocks[i][j - 1] == 0)
-					{
-						leftSide = true;
-					}
-				}
-				else
-				{
-					leftSide = true;
-				}
-
-				//Right Side
-				if (this->checkValidValue(0, this->widthMap - 1, j + 1))
-				{
-					if (this->mapSandBlocks[i][j + 1] == 0)
-					{
-						rightSide = true;
-					}
-				}
-				else
-				{
-					rightSide = true;
-				}
-
-				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float) (j) * 40.f, (float) (i) * 40.f)));
-				this->sandBlocks.back()->setSides(topSide, bottomSide, leftSide, rightSide);
+				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float) (j + 1) * 40.f, (float) (i + 7) * 40.f)));
+				this->updateSandBlockSides(this->sandBlocks.back(), this->mapSandBlocks.size(), this->mapSandBlocks[0].size(), i, j);
 			}
 		}
 	}
@@ -276,9 +290,23 @@ void Game::updateInput()
 	}
 }
 
+void Game::updateGui()
+{
+}
+
 void Game::updateWorm()
 {
 	this->worm->update();
+}
+
+void Game::updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j)
+{
+	sandBlock->setSides(
+		this->getSandBlockSide(false, i - 1, j, heightMap, i - 1),
+		this->getSandBlockSide(false, i + 1, j, heightMap, i + 1),
+		this->getSandBlockSide(false, i, j - 1, widthMap, j - 1),
+		this->getSandBlockSide(false, i, j + 1, widthMap, j + 1)
+	);
 }
 
 void Game::updateSandBlocks()
@@ -290,6 +318,11 @@ void Game::updateSandBlocks()
 
 	for (SandBlock* sandBlock : this->sandBlocks)
 	{
+		if (!this->getSandBlocksFallValues())
+		{
+			this->updateSandBlockSides(sandBlock, this->mapSandBlocks.size(), this->mapSandBlocks[0].size(), (((int)sandBlock->getPosition().y - 20) / 40) - 7, (((int)sandBlock->getPosition().x - 20) / 40) - 1);
+		}
+		
 		sandBlock->update();
 	}
 }
@@ -353,40 +386,11 @@ void Game::updateFall()
 		}
 	}
 
-	for (SandBlock* sandBlock : this->sandBlocks)
+	if (!this->getSandBlocksFallValues())
 	{
-		if (!sandBlock->getFallValue())
-		{
-			bool sandBlockIsFall = false;
-
-			for (SandBlock* sandBlock2 : this->sandBlocks)
-			{
-				if (sandBlock->getPosition().y != 460.f)
-				{
-					if (((sandBlock->getPosition().y + 40.f == sandBlock2->getPosition().y) && (sandBlock->getPosition().x == sandBlock2->getPosition().x))
-						|| ((sandBlock->getPosition().y - 40.f == sandBlock2->getPosition().y) && (sandBlock->getPosition().x == sandBlock2->getPosition().x))
-						|| ((sandBlock->getPosition().x + 40.f == sandBlock2->getPosition().x) && (sandBlock->getPosition().y == sandBlock2->getPosition().y))
-						|| ((sandBlock->getPosition().x - 40.f == sandBlock2->getPosition().x) && (sandBlock->getPosition().y == sandBlock2->getPosition().y))
-						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormHead()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormHead()->getPosition().x))
-						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodyFirst()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodyFirst()->getPosition().x))
-						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormBodySecond()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormBodySecond()->getPosition().x))
-						|| ((sandBlock->getPosition().y + 40.f == this->worm->getWormTail()->getPosition().y) && (sandBlock->getPosition().x == this->worm->getWormTail()->getPosition().x)))
-					{
-						sandBlockIsFall = false;
-						break;
-					}
-					else
-					{
-						sandBlockIsFall = true;
-					}
-				}
-			}
-
-			if (sandBlockIsFall)
-			{
-				sandBlock->setFallValue(true);
-			}
-		}
+		std::vector<std::vector<bool>> supportedSandBlocks;
+		this->setSupportedBlocks(this->mapSandBlocks, supportedSandBlocks);
+		this->dropUnsupportedBlocks(this->mapSandBlocks, supportedSandBlocks);
 	}
 }
 

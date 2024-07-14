@@ -29,9 +29,6 @@ private:
 	sf::Texture groundTexture;
 	sf::Sprite groundSprite;
 
-	int heightMap;
-	int widthMap;
-
 	std::vector<std::vector<int>> mapSandBlocks;
 
 	/*int mapSandBlocks[12][20]{
@@ -74,11 +71,16 @@ public:
 	const bool getWindowIsOpen() const;
 	void pollEvents();
 	bool getSandBlocksFallValues();
+	bool getSandBlockSide(bool side, int i, int j, int sizeMap, int axis);
+	void dfs(int i, int j, const std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
+	void setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
+	void dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks);
 
 	void spawnSandBlocks();
 	void updateInput();
 	void updateGui();
 	void updateWorm();
+	void updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j);
 	void updateSandBlocks();
 	void updateFall();
 	void update();
