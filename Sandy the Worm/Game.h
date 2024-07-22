@@ -83,6 +83,7 @@ public:
 	void updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j);
 	void updateSandBlocks();
 	void updateFall();
+	void updateBlockDestruction();
 	void update();
 
 	void renderGui(sf::RenderTarget& target);

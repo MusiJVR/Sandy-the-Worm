@@ -331,7 +331,7 @@ void Game::updateFall()
 {
 	if (!this->worm->getFallValue())
 	{
-		bool wormIsFall = false;
+		bool wormIsFall = true;
 
 		if (this->worm->getWormHead()->getPosition().y != 460.f
 			&& this->worm->getWormBodyFirst()->getPosition().y != 460.f
@@ -379,6 +379,10 @@ void Game::updateFall()
 				}
 			}
 		}
+		else
+		{
+			wormIsFall = false;
+		}
 
 		if (wormIsFall)
 		{
@@ -391,6 +395,22 @@ void Game::updateFall()
 		std::vector<std::vector<bool>> supportedSandBlocks;
 		this->setSupportedBlocks(this->mapSandBlocks, supportedSandBlocks);
 		this->dropUnsupportedBlocks(this->mapSandBlocks, supportedSandBlocks);
+	}
+}
+
+void Game::updateBlockDestruction()
+{
+	for (int i = 0; i < this->sandBlocks.size(); i++)
+	{
+		if (this->worm->getWormHead()->getPosition() == this->sandBlocks[i]->getPosition())
+		{
+			int iMap = (((int)this->sandBlocks[i]->getPosition().y - 20) / 40) - 7;
+			int jMap = (((int)this->sandBlocks[i]->getPosition().x - 20) / 40) - 1;
+
+			this->mapSandBlocks[iMap][jMap] = 0;
+
+			this->sandBlocks.erase(this->sandBlocks.begin() + i);
+		}
 	}
 }
 
@@ -411,6 +431,8 @@ void Game::update()
 		this->updateSandBlocks();
 
 		this->updateFall();
+
+		this->updateBlockDestruction();
 	}
 }
 
