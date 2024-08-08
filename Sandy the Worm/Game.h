@@ -30,6 +30,8 @@ private:
 	sf::Sprite groundSprite;
 
 	std::vector<std::vector<int>> mapSandBlocks;
+	std::vector<std::vector<bool>> supportedSandBlocks;
+	std::vector<std::vector<bool>> sandBlocksOnWorm;
 
 	/*int mapSandBlocks[12][20]{
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -73,8 +75,8 @@ public:
 	bool getSandBlocksFallValues();
 	bool getSandBlockSide(bool side, int i, int j, int sizeMap, int axis);
 	void dfs(int i, int j, const std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
-	void setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
-	void dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks);
+	void setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
+	void dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
 
 	void spawnSandBlocks();
 	void updateInput();
