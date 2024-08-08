@@ -103,8 +103,8 @@ void SandBlock::initSprite()
 
 void SandBlock::initPosition(sf::Vector2f position)
 {
-	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
-	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setOrigin(this->getTextureCenterCoordinates(this->sprite));
+	this->sprite.setPosition(position + this->getTextureCenterCoordinates(this->sprite));
 }
 
 SandBlock::SandBlock(sf::Vector2f position)
@@ -118,6 +118,11 @@ SandBlock::SandBlock(sf::Vector2f position)
 SandBlock::~SandBlock()
 {
 
+}
+
+sf::Vector2f SandBlock::getTextureCenterCoordinates(sf::Sprite sprite)
+{
+	return sf::Vector2f(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
 }
 
 sf::Sprite SandBlock::getSprite()

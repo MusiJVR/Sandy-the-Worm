@@ -4,7 +4,9 @@ void Game::initVariables()
 {
 	this->window = nullptr;
 
-	this->endGame = false;
+	this->mouseHeld = false;
+
+	this->gameActive = false;
 
 	this->sandBlockIsSpawned = false;
 
@@ -54,6 +56,11 @@ void Game::initText()
 
 }
 
+void Game::initMenu()
+{
+	this->menu = new Menu();
+}
+
 void Game::initWorm()
 {
 	this->worm = new Worm(sf::Vector2f(320.f, 440.f));
@@ -67,6 +74,7 @@ Game::Game()
 	this->initSprite();
 	this->initFonts();
 	this->initText();
+	this->initMenu();
 	this->initWorm();
 }
 
@@ -75,9 +83,14 @@ Game::~Game()
 	delete this->window;
 }
 
-const bool& Game::getEndGame() const
+const bool& Game::getGameActive() const
 {
-	return this->endGame;
+	return this->gameActive;
+}
+
+void Game::setGameActive(bool value)
+{
+	this->gameActive = value;
 }
 
 void Game::resetKeys()
@@ -105,6 +118,8 @@ void Game::pollEvents()
 		case sf::Event::KeyPressed:
 			if (this->event.key.code == sf::Keyboard::Escape)
 				this->window->close();
+			if (this->event.key.code == sf::Keyboard::Space)
+				this->menu->setWelcomeScreenActive(false);
 			break;
 		}
 	}
@@ -299,8 +314,58 @@ void Game::updateInput()
 	}
 }
 
-void Game::updateGui()
+void Game::updateMousePositions()
 {
+	this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+	this->mousePosView = this->window->mapPixelToCoords(this->mousePosWindow);
+}
+
+void Game::updateButtonScale(sf::Sprite& button, sf::Vector2f scale)
+{
+	if (button.getGlobalBounds().contains(this->mousePosView))
+	{
+		button.setScale(sf::Vector2f(scale.x * 1.1f, scale.y * 1.1f));
+	}
+	else
+	{
+		button.setScale(scale);
+	}
+}
+
+void Game::updatePressingButtons()
+{
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (!this->mouseHeld)
+		{
+			this->mouseHeld = true;
+			if (this->menu->getSpriteButtonPlay().getGlobalBounds().contains(this->mousePosView))
+			{
+				this->menu->getSpriteButtonPlay().setScale(sf::Vector2f(1.f, 1.f));
+				this->setGameActive(true);
+			}
+		}
+	}
+	else
+	{
+		this->mouseHeld = false;
+	}
+}
+
+void Game::updateMenu()
+{
+	this->menu->update();
+
+	if (!this->menu->getWelcomeScreenActive())
+	{
+		this->updateMousePositions();
+
+		this->updateButtonScale(this->menu->getSpriteButtonPlay(), sf::Vector2f(1.f, 1.f));
+		this->updateButtonScale(this->menu->getSpriteFirstButtonSwitch(), sf::Vector2f(1.f, 1.f));
+		this->updateButtonScale(this->menu->getSpriteSecondButtonSwitch(), sf::Vector2f(-1.f, 1.f));
+
+		this->updatePressingButtons();
+	}
 }
 
 void Game::updateWorm()
@@ -434,10 +499,17 @@ void Game::update()
 
 	//this->updateText();
 
-	if (!this->endGame)
+	if (!this->gameActive)
 	{
-		//this->updateMousePositions();
+		this->updateMenu();
 
+		if (this->menu->getGameStarted())
+		{
+			this->setGameActive(true);
+		}
+	}
+	else
+	{
 		this->updateInput();
 
 		this->updateWorm();
@@ -450,9 +522,9 @@ void Game::update()
 	}
 }
 
-void Game::renderGui(sf::RenderTarget& target)
+void Game::renderMenu(sf::RenderTarget& target)
 {
-
+	this->menu->render(target);
 }
 
 void Game::renderGround(sf::RenderTarget& target)
@@ -477,14 +549,19 @@ void Game::render()
 {
 	this->window->clear();
 
-	this->renderGui(*this->window);
+	if (!this->gameActive)
+	{
+		this->renderMenu(*this->window);
+	}
+	else
+	{
+		this->renderGround(*this->window);
 
-	this->renderGround(*this->window);
+		this->renderWorm(*this->window);
 
-	this->renderWorm(*this->window);
-
-	this->renderSandBlocks(*this->window);
-
+		this->renderSandBlocks(*this->window);
+	}
+	
 	this->window->display();
 }
 

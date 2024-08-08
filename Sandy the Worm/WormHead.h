@@ -27,6 +27,7 @@ public:
 	virtual ~WormHead();
 
 	//Accessors
+	sf::Vector2f getTextureCenterCoordinates(sf::Sprite sprite);
 	sf::Sprite getSprite();
 	sf::Vector2f getPosition();
 	void moveSprite(sf::Vector2f movePosition);

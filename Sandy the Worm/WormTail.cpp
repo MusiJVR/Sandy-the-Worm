@@ -24,8 +24,8 @@ void WormTail::initSprite()
 
 void WormTail::initPosition(sf::Vector2f position, sf::Vector2f followPosition)
 {
-	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
-	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setOrigin(this->getTextureCenterCoordinates(this->sprite));
+	this->sprite.setPosition(position + this->getTextureCenterCoordinates(this->sprite));
 
 	this->resetFollowPosition(followPosition);
 }
@@ -41,6 +41,11 @@ WormTail::WormTail(sf::Vector2f position, sf::Vector2f followPosition)
 WormTail::~WormTail()
 {
 
+}
+
+sf::Vector2f WormTail::getTextureCenterCoordinates(sf::Sprite sprite)
+{
+	return sf::Vector2f(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
 }
 
 sf::Sprite WormTail::getSprite()

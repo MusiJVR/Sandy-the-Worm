@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 
+#include "Menu.h"
 #include "Worm.h"
 #include "SandBlock.h"
 
@@ -17,9 +18,15 @@ private:
 
 	Worm* worm;
 
+	Menu* menu;
+
+	sf::Vector2i mousePosWindow;
+	sf::Vector2f mousePosView;
+	bool mouseHeld;
+
 	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
 
-	bool endGame;
+	bool gameActive;
 	bool sandBlockIsSpawned;
 
 	sf::Font font;
@@ -56,6 +63,7 @@ private:
 	void initSprite();
 	void initFonts();
 	void initText();
+	void initMenu();
 	void initWorm();
 
 public:
@@ -64,7 +72,8 @@ public:
 	virtual ~Game();
 
 	//Accessors
-	const bool& getEndGame() const;
+	const bool& getGameActive() const;
+	void setGameActive(bool value);
 	void resetKeys();
 
 	//Modifiers
@@ -80,7 +89,10 @@ public:
 
 	void spawnSandBlocks();
 	void updateInput();
-	void updateGui();
+	void updateMousePositions();
+	void updateButtonScale(sf::Sprite& button, sf::Vector2f scale);
+	void updatePressingButtons();
+	void updateMenu();
 	void updateWorm();
 	void updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j);
 	void updateSandBlocks();
@@ -88,7 +100,7 @@ public:
 	void updateBlockDestruction();
 	void update();
 
-	void renderGui(sf::RenderTarget& target);
+	void renderMenu(sf::RenderTarget& target);
 	void renderGround(sf::RenderTarget& target);
 	void renderWorm(sf::RenderTarget& target);
 	void renderSandBlocks(sf::RenderTarget& target);

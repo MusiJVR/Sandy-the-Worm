@@ -29,8 +29,8 @@ void WormBody::initSprite()
 
 void WormBody::initPosition(sf::Vector2f position, sf::Vector2f followPosition)
 {
-	this->sprite.setOrigin(this->sprite.getTexture()->getSize().x * 0.5f, this->sprite.getTexture()->getSize().y * 0.5f);
-	this->sprite.setPosition(position.x + this->sprite.getTexture()->getSize().x * 0.5f, position.y + this->sprite.getTexture()->getSize().y * 0.5f);
+	this->sprite.setOrigin(this->getTextureCenterCoordinates(this->sprite));
+	this->sprite.setPosition(position + this->getTextureCenterCoordinates(this->sprite));
 
 	this->resetFollowPosition(followPosition);
 }
@@ -46,6 +46,11 @@ WormBody::WormBody(sf::Vector2f position, sf::Vector2f followPosition)
 WormBody::~WormBody()
 {
 
+}
+
+sf::Vector2f WormBody::getTextureCenterCoordinates(sf::Sprite sprite)
+{
+	return sf::Vector2f(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
 }
 
 sf::Sprite WormBody::getSprite()
