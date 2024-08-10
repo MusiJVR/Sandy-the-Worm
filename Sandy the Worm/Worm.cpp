@@ -48,19 +48,17 @@ void Worm::moveWorm()
 	this->tail->resetFollowPosition(this->bodySecond->getPosition());
 }
 
-bool Worm::wormCanMove(sf::Vector2f futurePosition)
+bool Worm::wormCanMove(std::vector<SandBlock*> blocks, sf::Vector2f futurePosition)
 {
 	bool canMove = true;
 	this->resetWormPositions();
 
-	if (futurePosition == this->bodyFirst->getPosition())
+	for (SandBlock* block : blocks)
 	{
-		canMove = false;
-	}
-
-	if (futurePosition.y > 480.f)
-	{
-		canMove = false;
+		if (futurePosition == this->bodyFirst->getPosition() || futurePosition.y > 480.f || (futurePosition == block->getPosition() && !block->isDestructible()))
+		{
+			canMove = false;
+		}
 	}
 
 	/*...

@@ -1,6 +1,6 @@
 #include "SandBlock.h"
 
-void SandBlock::initVariables()
+void SandBlock::initVariables(bool destructible)
 {
 	this->topSide = false;
 	this->bottomSide = false;
@@ -8,6 +8,8 @@ void SandBlock::initVariables()
 	this->rightSide = false;
 
 	this->sandBlockFalls = false;
+
+	this->destructible = destructible;
 
 	this->fallCounter = 0;
 }
@@ -99,6 +101,11 @@ void SandBlock::initSprite()
 {
 	this->sprite.setTexture(this->texture);
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
+
+	if (!this->isDestructible())
+	{
+		this->sprite.setColor(sf::Color(255, 192, 203));
+	}
 }
 
 void SandBlock::initPosition(sf::Vector2f position)
@@ -107,9 +114,9 @@ void SandBlock::initPosition(sf::Vector2f position)
 	this->sprite.setPosition(position + this->getTextureCenterCoordinates(this->sprite));
 }
 
-SandBlock::SandBlock(sf::Vector2f position)
+SandBlock::SandBlock(bool destructible, sf::Vector2f position)
 {
-	this->initVariables();
+	this->initVariables(destructible);
 	this->initTexture();
 	this->initSprite();
 	this->initPosition(position);
@@ -133,6 +140,11 @@ sf::Sprite SandBlock::getSprite()
 sf::Vector2f SandBlock::getPosition()
 {
 	return this->sprite.getPosition();
+}
+
+bool SandBlock::isDestructible()
+{
+	return this->destructible;
 }
 
 void SandBlock::moveSprite(sf::Vector2f position)

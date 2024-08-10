@@ -10,6 +10,8 @@ void Game::initVariables()
 
 	this->sandBlockIsSpawned = false;
 
+	this->selectedLevel = 1;
+
 	this->mapSandBlocks = {
 		{1, 1, 1, 1, 1},
 		{1, 1, 1, 1, 1},
@@ -40,7 +42,7 @@ void Game::initTexture()
 void Game::initSprite()
 {
 	this->groundSprite.setTexture(this->groundTexture);
-	this->groundSprite.setPosition(sf::Vector2f(0.f, 480.f));;
+	this->groundSprite.setPosition(sf::Vector2f(0.f, 0.f));;
 }
 
 void Game::initFonts()
@@ -59,6 +61,76 @@ void Game::initText()
 void Game::initMenu()
 {
 	this->menu = new Menu();
+}
+
+void Game::initLevels()
+{
+	switch (this->selectedLevel)
+	{
+	case 1:
+		this->mapLevelSandBlocks = {
+			{0, 1, 1, 1, 0},
+			{1, 1, 1, 1, 1},
+			{1, 1, 1, 1, 1},
+			{0, 0, 1, 0, 0},
+			{0, 0, 1, 0, 0}
+		};
+		break;
+	case 2:
+		this->mapLevelSandBlocks = {
+			{0, 0, 1, 0, 0},
+			{0, 0, 1, 0, 0},
+			{1, 1, 1, 1, 1},
+			{0, 0, 1, 0, 0},
+			{0, 0, 1, 0, 0}
+		};
+		break;
+	case 3:
+		this->mapLevelSandBlocks = {
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 1, 0, 0},
+			{0, 1, 1, 1, 0},
+			{1, 1, 1, 1, 1}
+		};
+		break;
+	case 4:
+		this->mapLevelSandBlocks = {
+			{0, 0, 0, 0, 1},
+			{0, 0, 0, 1, 1},
+			{0, 1, 1, 1, 0},
+			{0, 1, 0, 0, 0},
+			{1, 1, 0, 0, 0}
+		};
+		break;
+	case 5:
+		this->mapLevelSandBlocks = {
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 1, 1, 1, 0},
+			{0, 1, 0, 1, 0},
+			{0, 1, 1, 1, 0}
+		};
+		break;
+	case 6:
+		this->mapLevelSandBlocks = {
+			{1, 0, 0, 0, 1},
+			{1, 0, 0, 0, 1},
+			{1, 1, 1, 1, 1},
+			{0, 0, 1, 0, 0},
+			{0, 0, 1, 0, 0}
+		};
+		break;
+	default:
+		this->mapLevelSandBlocks = {
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0}
+		};
+		break;
+	}
 }
 
 void Game::initWorm()
@@ -134,11 +206,11 @@ bool Game::getSandBlocksFallValues()
 	return false;
 }
 
-bool Game::getSandBlockSide(bool side, int i, int j, int sizeMap, int axis)
+bool Game::getSandBlockSide(std::vector<std::vector<int>> map, bool side, int i, int j, int sizeMap, int axis)
 {
 	if (this->checkValidValue(0, sizeMap - 1, axis))
 	{
-		if (this->mapSandBlocks[i][j] == 0)
+		if (map[i][j] == 0)
 		{
 			side = true;
 		}
@@ -225,7 +297,7 @@ void Game::dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, c
 	}
 }
 
-void Game::spawnSandBlocks()
+void Game::spawnBlocks(std::vector<std::vector<int>> map, std::vector<SandBlock*> blocks, bool destructible, int x, int y)
 {
 	for (int i = 0; i < this->mapSandBlocks.size(); i++)
 	{
@@ -233,26 +305,129 @@ void Game::spawnSandBlocks()
 		{
 			if (this->mapSandBlocks[i][j] > 0)
 			{
-				this->sandBlocks.push_back(new SandBlock(sf::Vector2f((float) (j + 1) * 40.f, (float) (i + 7) * 40.f)));
-				this->updateSandBlockSides(this->sandBlocks.back(), this->mapSandBlocks.size(), this->mapSandBlocks[0].size(), i, j);
+				this->sandBlocks.push_back(new SandBlock(true, sf::Vector2f((float) (j + 1) * 40.f, (float) (i + 7) * 40.f)));
 			}
 		}
 	}
 
-	this->sandBlockIsSpawned = true;
+	for (int i = 0; i < this->mapLevelSandBlocks.size(); i++)
+	{
+		for (int j = 0; j < this->mapLevelSandBlocks[0].size(); j++)
+		{
+			if (this->mapLevelSandBlocks[i][j] > 0)
+			{
+				this->levelSandBlocks.push_back(new SandBlock(false, sf::Vector2f((float)(j + 14) * 40.f, (float)(i + 7) * 40.f)));
+			}
+		}
+	}
+}
+
+void Game::moveIconLevels(int minIconLevel, int maxIconLevel, int resetIconLevel, int moveIconLevel, int extremeIconLevel, sf::Vector2f extremePosition, sf::Vector2f newPosition)
+{
+	if (minIconLevel >= maxIconLevel)
+	{
+		this->selectedLevel = resetIconLevel;
+	}
+	else
+	{
+		this->selectedLevel += moveIconLevel;
+	}
+
+	std::vector<std::pair<int, sf::Sprite*>> newShownIconLevels(5, { 0, nullptr });
+
+	for (auto icon : this->menu->getShownIconLevels())
+	{
+		if (icon.second->getPosition() == extremePosition)
+		{
+			if (this->menu->getShownIconLevels()[extremeIconLevel].first == this->menu->getAllIconLevels().size() - resetIconLevel)
+			{
+				newShownIconLevels[extremeIconLevel] = { resetIconLevel - 1, this->menu->getAllIconLevels()[resetIconLevel - 1] };
+			}
+			else
+			{
+				newShownIconLevels[extremeIconLevel] = { this->menu->getShownIconLevels()[extremeIconLevel].first + moveIconLevel, this->menu->getAllIconLevels()[this->menu->getShownIconLevels()[extremeIconLevel].first + moveIconLevel] };
+			}
+
+			newShownIconLevels[extremeIconLevel].second->setPosition(newPosition + this->menu->getTextureCenterCoordinates(*newShownIconLevels[extremeIconLevel].second));
+		}
+		else
+		{
+			icon.second->move(sf::Vector2f((float) -98.f * moveIconLevel, 0.f));
+
+			int& key = icon.first;
+			auto iter = std::find_if(this->menu->getShownIconLevels().begin(), this->menu->getShownIconLevels().end(),
+				[&key](const std::pair<int, sf::Sprite*>& pair) {
+					return pair.first == key;
+				});
+			int index = std::distance(this->menu->getShownIconLevels().begin(), iter);
+
+			newShownIconLevels[index - moveIconLevel] = icon;
+		}
+	}
+	this->menu->getShownIconLevels() = newShownIconLevels;
+	std::vector<std::pair<int, sf::Sprite*>>().swap(newShownIconLevels);
+}
+
+bool Game::wormIsFall(bool wormFalls, std::vector<SandBlock*> blocks, int x, int y, bool destructible)
+{
+	for (SandBlock* block : blocks)
+	{
+		int i = (((int)block->getPosition().y - 20) / 40) - y;
+		int j = (((int)block->getPosition().x - 20) / 40) - x;
+
+		if (this->supportedSandBlocks[i][j] || !destructible)
+		{
+			if ((this->worm->getWormHead()->getPosition().y + 40.f == block->getPosition().y) && (this->worm->getWormHead()->getPosition().x == block->getPosition().x))
+			{
+				wormFalls = false;
+				break;
+			}
+			else if (((this->worm->getWormBodyFirst()->getPosition().y + 40.f == block->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == block->getPosition().x))
+				|| ((this->worm->getWormBodyFirst()->getPosition().y - 40.f == block->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == block->getPosition().x))
+				|| ((this->worm->getWormBodyFirst()->getPosition().x + 40.f == block->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == block->getPosition().y))
+				|| ((this->worm->getWormBodyFirst()->getPosition().x - 40.f == block->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == block->getPosition().y)))
+			{
+				wormFalls = false;
+				break;
+			}
+			else if (((this->worm->getWormBodySecond()->getPosition().y + 40.f == block->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == block->getPosition().x))
+				|| ((this->worm->getWormBodySecond()->getPosition().y - 40.f == block->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == block->getPosition().x))
+				|| ((this->worm->getWormBodySecond()->getPosition().x + 40.f == block->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == block->getPosition().y))
+				|| ((this->worm->getWormBodySecond()->getPosition().x - 40.f == block->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == block->getPosition().y)))
+			{
+				wormFalls = false;
+				break;
+			}
+			else if ((this->worm->getWormTail()->getPosition().y + 40.f == block->getPosition().y) && (this->worm->getWormTail()->getPosition().x == block->getPosition().x))
+			{
+				wormFalls = false;
+				break;
+			}
+			else
+			{
+				wormFalls = true;
+			}
+		}
+	}
+
+	return wormFalls;
 }
 
 void Game::updateInput()
 {
 	if (!this->worm->getFallValue() && !this->getSandBlocksFallValues())
 	{
+		std::vector<SandBlock*> vec;
+		vec.insert(vec.end(), this->sandBlocks.begin(), this->sandBlocks.end());
+		vec.insert(vec.end(), this->levelSandBlocks.begin(), this->levelSandBlocks.end());
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
 			if (!this->keyHeldA)
 			{
 				this->keyHeldA = true;
 				sf::Vector2f movePosition(-40.f, 0.f);
-				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, true, false);
@@ -268,7 +443,7 @@ void Game::updateInput()
 			{
 				this->keyHeldD = true;
 				sf::Vector2f movePosition(40.f, 0.f);
-				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, false, true);
@@ -284,7 +459,7 @@ void Game::updateInput()
 			{
 				this->keyHeldW = true;
 				sf::Vector2f movePosition(0.f, -40.f);
-				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, false, true, true);
@@ -300,7 +475,7 @@ void Game::updateInput()
 			{
 				this->keyHeldS = true;
 				sf::Vector2f movePosition(0.f, 40.f);
-				if (this->worm->wormCanMove(this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(false, true, true, true);
@@ -342,7 +517,18 @@ void Game::updatePressingButtons()
 			if (this->menu->getSpriteButtonPlay().getGlobalBounds().contains(this->mousePosView))
 			{
 				this->menu->getSpriteButtonPlay().setScale(sf::Vector2f(1.f, 1.f));
+				this->initLevels();
 				this->setGameActive(true);
+
+				std::cout << "Level selected: " << this->selectedLevel << "\n\n";
+			}
+			else if (this->menu->getSpriteFirstButtonSwitch().getGlobalBounds().contains(this->mousePosView))
+			{
+				this->moveIconLevels(this->selectedLevel, this->menu->getAllIconLevels().size(), 1, 1, 4, sf::Vector2f(204.f, 213.f), sf::Vector2f(558.f, 175.f));
+			}
+			else if (this->menu->getSpriteSecondButtonSwitch().getGlobalBounds().contains(this->mousePosView))
+			{
+				this->moveIconLevels(1, this->selectedLevel, this->menu->getAllIconLevels().size(), -1, 0, sf::Vector2f(596.f, 213.f), sf::Vector2f(166.f, 175.f));
 			}
 		}
 	}
@@ -373,31 +559,44 @@ void Game::updateWorm()
 	this->worm->update();
 }
 
-void Game::updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j)
+void Game::updateBlockSides(SandBlock* block, std::vector<std::vector<int>> map, int heightMap, int widthMap, int i, int j)
 {
-	sandBlock->setSides(
-		this->getSandBlockSide(false, i - 1, j, heightMap, i - 1),
-		this->getSandBlockSide(false, i + 1, j, heightMap, i + 1),
-		this->getSandBlockSide(false, i, j - 1, widthMap, j - 1),
-		this->getSandBlockSide(false, i, j + 1, widthMap, j + 1)
+	block->setSides(
+		this->getSandBlockSide(map, false, i - 1, j, heightMap, i - 1),
+		this->getSandBlockSide(map, false, i + 1, j, heightMap, i + 1),
+		this->getSandBlockSide(map, false, i, j - 1, widthMap, j - 1),
+		this->getSandBlockSide(map, false, i, j + 1, widthMap, j + 1)
 	);
 }
 
-void Game::updateSandBlocks()
+void Game::updateBlocks()
 {
 	if (!this->sandBlockIsSpawned)
 	{
-		this->spawnSandBlocks();
+		this->spawnBlocks(this->mapSandBlocks, this->sandBlocks, true, 1, 7);
+		this->spawnBlocks(this->mapLevelSandBlocks, this->levelSandBlocks, false, 14, 7);
+
+		this->sandBlockIsSpawned = true;
 	}
 
 	for (SandBlock* sandBlock : this->sandBlocks)
 	{
 		if (!this->getSandBlocksFallValues())
 		{
-			this->updateSandBlockSides(sandBlock, this->mapSandBlocks.size(), this->mapSandBlocks[0].size(), (((int)sandBlock->getPosition().y - 20) / 40) - 7, (((int)sandBlock->getPosition().x - 20) / 40) - 1);
+			this->updateBlockSides(sandBlock, this->mapSandBlocks, this->mapSandBlocks.size(), this->mapSandBlocks[0].size(), (((int)sandBlock->getPosition().y - 20) / 40) - 7, (((int)sandBlock->getPosition().x - 20) / 40) - 1);
 		}
 		
 		sandBlock->update();
+	}
+
+	for (SandBlock* levelSandBlock : this->levelSandBlocks)
+	{
+		if (!this->getSandBlocksFallValues())
+		{
+			this->updateBlockSides(levelSandBlock, this->mapLevelSandBlocks, this->mapLevelSandBlocks.size(), this->mapLevelSandBlocks[0].size(), (((int)levelSandBlock->getPosition().y - 20) / 40) - 7, (((int)levelSandBlock->getPosition().x - 20) / 40) - 14);
+		}
+
+		levelSandBlock->update();
 	}
 }
 
@@ -405,66 +604,24 @@ void Game::updateFall()
 {
 	if (!this->worm->getFallValue())
 	{
-		bool wormIsFall = true;
+		bool wormFalls = true;
 
 		if (this->worm->getWormHead()->getPosition().y != 460.f
 			&& this->worm->getWormBodyFirst()->getPosition().y != 460.f
 			&& this->worm->getWormBodySecond()->getPosition().y != 460.f
 			&& this->worm->getWormTail()->getPosition().y != 460.f)
 		{
-			for (SandBlock* sandBlock : this->sandBlocks)
+			if (!this->wormIsFall(wormFalls, this->sandBlocks, 1, 7, true) || !this->wormIsFall(wormFalls, this->levelSandBlocks, 14, 7, false))
 			{
-
-				int i = (((int) sandBlock->getPosition().y - 20) / 40) - 7;
-				int j = (((int) sandBlock->getPosition().x - 20) / 40) - 1;
-
-				//std::cout << "sand " << sandBlock->getPosition().x << " " << sandBlock->getPosition().y << "\n";
-				//std::cout << "head " << this->worm->getWormHead()->getPosition().x << " " << this->worm->getWormHead()->getPosition().y << "\n";
-				//std::cout << this->worm->getWormBodyFirst()->getPosition().x << " " << this->worm->getWormBodyFirst()->getPosition().y << "\n";
-				//std::cout << this->worm->getWormBodySecond()->getPosition().x << " " << this->worm->getWormBodySecond()->getPosition().y << "\n";
-				//std::cout << this->worm->getWormTail()->getPosition().x << " " << this->worm->getWormTail()->getPosition().y << "\n";
-
-				if (this->supportedSandBlocks[i][j])
-				{
-					if ((this->worm->getWormHead()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormHead()->getPosition().x == sandBlock->getPosition().x))
-					{
-						wormIsFall = false;
-						break;
-					}
-					else if (((this->worm->getWormBodyFirst()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == sandBlock->getPosition().x))
-						|| ((this->worm->getWormBodyFirst()->getPosition().y - 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodyFirst()->getPosition().x == sandBlock->getPosition().x))
-						|| ((this->worm->getWormBodyFirst()->getPosition().x + 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == sandBlock->getPosition().y))
-						|| ((this->worm->getWormBodyFirst()->getPosition().x - 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodyFirst()->getPosition().y == sandBlock->getPosition().y)))
-					{
-						wormIsFall = false;
-						break;
-					}
-					else if (((this->worm->getWormBodySecond()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == sandBlock->getPosition().x))
-						|| ((this->worm->getWormBodySecond()->getPosition().y - 40.f == sandBlock->getPosition().y) && (this->worm->getWormBodySecond()->getPosition().x == sandBlock->getPosition().x))
-						|| ((this->worm->getWormBodySecond()->getPosition().x + 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == sandBlock->getPosition().y))
-						|| ((this->worm->getWormBodySecond()->getPosition().x - 40.f == sandBlock->getPosition().x) && (this->worm->getWormBodySecond()->getPosition().y == sandBlock->getPosition().y)))
-					{
-						wormIsFall = false;
-						break;
-					}
-					else if ((this->worm->getWormTail()->getPosition().y + 40.f == sandBlock->getPosition().y) && (this->worm->getWormTail()->getPosition().x == sandBlock->getPosition().x))
-					{
-						wormIsFall = false;
-						break;
-					}
-					else
-					{
-						wormIsFall = true;
-					}
-				}
+				wormFalls = false;
 			}
 		}
 		else
 		{
-			wormIsFall = false;
+			wormFalls = false;
 		}
 
-		if (wormIsFall)
+		if (wormFalls)
 		{
 			this->worm->setFallValue(true);
 		}
@@ -497,8 +654,6 @@ void Game::update()
 {
 	this->pollEvents();
 
-	//this->updateText();
-
 	if (!this->gameActive)
 	{
 		this->updateMenu();
@@ -514,11 +669,11 @@ void Game::update()
 
 		this->updateWorm();
 
-		this->updateSandBlocks();
-
-		this->updateFall();
+		this->updateBlocks();
 
 		this->updateBlockDestruction();
+
+		this->updateFall();
 	}
 }
 
@@ -542,6 +697,11 @@ void Game::renderSandBlocks(sf::RenderTarget& target)
 	for (SandBlock* sandBlock : this->sandBlocks)
 	{
 		sandBlock->render(target);
+	}
+
+	for (SandBlock* levelSandBlock : this->levelSandBlocks)
+	{
+		levelSandBlock->render(target);
 	}
 }
 

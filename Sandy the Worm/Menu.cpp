@@ -5,6 +5,10 @@ void Menu::initVariables()
 	this->welcomeScreenActive = true;
 
 	this->gameStarted = false;
+
+	this->allIconLevels = { &this->spriteIconlvl1, &this->spriteIconlvl2, &this->spriteIconlvl3, &this->spriteIconlvl4, &this->spriteIconlvl5, &this->spriteIconlvl6 };
+
+	this->shownIconLevels = { { 4, &this->spriteIconlvl5 }, { 5, &this->spriteIconlvl6 }, { 0, &this->spriteIconlvl1 }, { 1, &this->spriteIconlvl2 }, { 2, &this->spriteIconlvl3 } };
 }
 
 void Menu::initTexture()
@@ -58,6 +62,11 @@ void Menu::initTexture()
 	{
 		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
 	}
+
+	if (!this->textureIconlvl6.loadFromFile("Textures/icon_lvl6.png"))
+	{
+		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+	}
 }
 
 void Menu::initSprite()
@@ -95,6 +104,9 @@ void Menu::initSprite()
 
 	this->spriteIconlvl5.setTexture(this->textureIconlvl5);
 	this->spriteIconlvl5.setTextureRect(sf::IntRect(0, 0, 76, 76));
+
+	this->spriteIconlvl6.setTexture(this->textureIconlvl6);
+	this->spriteIconlvl6.setTextureRect(sf::IntRect(0, 0, 76, 76));
 }
 
 void Menu::initPosition()
@@ -127,10 +139,13 @@ void Menu::initPosition()
 	this->spriteIconlvl3.setPosition(sf::Vector2f(558.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl3));
 
 	this->spriteIconlvl4.setOrigin(this->getTextureCenterCoordinates(this->spriteIconlvl4));
-	this->spriteIconlvl4.setPosition(sf::Vector2f(166.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl4));
+	//this->spriteIconlvl4.setPosition(sf::Vector2f(166.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl4));
 
 	this->spriteIconlvl5.setOrigin(this->getTextureCenterCoordinates(this->spriteIconlvl5));
-	this->spriteIconlvl5.setPosition(sf::Vector2f(264.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl5));
+	this->spriteIconlvl5.setPosition(sf::Vector2f(166.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl5));
+
+	this->spriteIconlvl6.setOrigin(this->getTextureCenterCoordinates(this->spriteIconlvl6));
+	this->spriteIconlvl6.setPosition(sf::Vector2f(264.f, 175.f) + this->getTextureCenterCoordinates(this->spriteIconlvl6));
 }
 
 Menu::Menu()
@@ -186,6 +201,16 @@ void Menu::setGameStarted(bool value)
 	this->gameStarted = value;
 }
 
+std::vector<sf::Sprite*>& Menu::getAllIconLevels()
+{
+	return this->allIconLevels;
+}
+
+std::vector<std::pair<int, sf::Sprite*>>& Menu::getShownIconLevels()
+{
+	return this->shownIconLevels;
+}
+
 void Menu::updateWelcomeScreen()
 {
 	
@@ -219,11 +244,13 @@ void Menu::render(sf::RenderTarget& target)
 		target.draw(this->spriteButtonPlay);
 		target.draw(this->spriteFirstButtonSwitch);
 		target.draw(this->spriteSecondButtonSwitch);
-		target.draw(this->spriteIconlvl1);
-		target.draw(this->spriteIconlvl2);
-		target.draw(this->spriteIconlvl3);
-		target.draw(this->spriteIconlvl4);
-		target.draw(this->spriteIconlvl5);
+
+		for (auto icon : this->shownIconLevels)
+		{
+			//std::cout << icon.first << " zzzzzzzz \n";
+			target.draw(*icon.second);
+		}
+
 		target.draw(this->spriteSelectedlvlFrame);
 	}
 }

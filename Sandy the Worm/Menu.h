@@ -21,7 +21,8 @@ private:
 		textureIconlvl2,
 		textureIconlvl3,
 		textureIconlvl4,
-		textureIconlvl5;
+		textureIconlvl5,
+		textureIconlvl6;
 	sf::Sprite spriteWelcomeScreen,
 		spriteWelcomeTitle,
 		spriteButtonPlay,
@@ -32,7 +33,11 @@ private:
 		spriteIconlvl2,
 		spriteIconlvl3,
 		spriteIconlvl4,
-		spriteIconlvl5;
+		spriteIconlvl5,
+		spriteIconlvl6;
+
+	std::vector<sf::Sprite*> allIconLevels;
+	std::vector<std::pair<int, sf::Sprite*>> shownIconLevels;
 
 	bool welcomeScreenActive;
 	bool gameStarted;
@@ -57,6 +62,8 @@ public:
 	void setWelcomeScreenActive(bool value);
 	bool getGameStarted();
 	void setGameStarted(bool value);
+	std::vector<sf::Sprite*>& getAllIconLevels();
+	std::vector<std::pair<int, sf::Sprite*>>& getShownIconLevels();
 
 	void updateWelcomeScreen();
 	void update();

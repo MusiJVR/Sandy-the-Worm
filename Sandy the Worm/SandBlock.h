@@ -30,23 +30,24 @@ private:
 		textureTopBottomLeftRight;
 	sf::Sprite sprite;
 
-	bool topSide, bottomSide, leftSide, rightSide, sandBlockFalls;
+	bool topSide, bottomSide, leftSide, rightSide, sandBlockFalls, destructible;
 
 	unsigned fallCounter;
 
-	void initVariables();
+	void initVariables(bool destructible);
 	void initTexture();
 	void initSprite();
 	void initPosition(sf::Vector2f position);
 
 public:
-	SandBlock(sf::Vector2f position);
+	SandBlock(bool destructible, sf::Vector2f position);
 	virtual ~SandBlock();
 
 	//Accessors
 	sf::Vector2f getTextureCenterCoordinates(sf::Sprite sprite);
 	sf::Sprite getSprite();
 	sf::Vector2f getPosition();
+	bool isDestructible();
 	void moveSprite(sf::Vector2f position);
 
 	//Functions

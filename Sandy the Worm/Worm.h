@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "SandBlock.h"
 #include "WormHead.h"
 #include "WormBody.h"
 #include "WormTail.h"
@@ -31,7 +32,7 @@ public:
 	void moveWorm();
 
 	//Functions
-	bool wormCanMove(sf::Vector2f futurePosition);
+	bool wormCanMove(std::vector<SandBlock*> blocks, sf::Vector2f futurePosition);
 	bool getFallValue();
 	void setFallValue(bool value);
 	void wormFall();

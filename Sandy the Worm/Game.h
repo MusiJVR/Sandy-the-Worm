@@ -7,7 +7,6 @@
 
 #include "Menu.h"
 #include "Worm.h"
-#include "SandBlock.h"
 
 class Game
 {
@@ -36,7 +35,10 @@ private:
 	sf::Texture groundTexture;
 	sf::Sprite groundSprite;
 
+	int selectedLevel;
+
 	std::vector<std::vector<int>> mapSandBlocks;
+	std::vector<std::vector<int>> mapLevelSandBlocks;
 	std::vector<std::vector<bool>> supportedSandBlocks;
 	std::vector<std::vector<bool>> sandBlocksOnWorm;
 
@@ -56,6 +58,7 @@ private:
 	};*/
 
 	std::vector<SandBlock*> sandBlocks;
+	std::vector<SandBlock*> levelSandBlocks;
 
 	void initVariables();
 	void initWindow();
@@ -64,6 +67,7 @@ private:
 	void initFonts();
 	void initText();
 	void initMenu();
+	void initLevels();
 	void initWorm();
 
 public:
@@ -82,22 +86,24 @@ public:
 	const bool getWindowIsOpen() const;
 	void pollEvents();
 	bool getSandBlocksFallValues();
-	bool getSandBlockSide(bool side, int i, int j, int sizeMap, int axis);
+	bool getSandBlockSide(std::vector<std::vector<int>> map, bool side, int i, int j, int sizeMap, int axis);
 	void dfs(int i, int j, const std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
 	void setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
 	void dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
+	void spawnBlocks(std::vector<std::vector<int>> map, std::vector<SandBlock*> blocks, bool destructible, int x, int y);
+	void moveIconLevels(int minIconLevel, int maxIconLevel, int resetIconLevel, int moveIconLevel, int extremeIconLevel, sf::Vector2f extremePosition, sf::Vector2f newPosition);
+	bool wormIsFall(bool wormFalls, std::vector<SandBlock*> blocks, int x, int y, bool destructible);
 
-	void spawnSandBlocks();
 	void updateInput();
 	void updateMousePositions();
 	void updateButtonScale(sf::Sprite& button, sf::Vector2f scale);
 	void updatePressingButtons();
 	void updateMenu();
 	void updateWorm();
-	void updateSandBlockSides(SandBlock* sandBlock, int heightMap, int widthMap, int i, int j);
-	void updateSandBlocks();
-	void updateFall();
+	void updateBlockSides(SandBlock* block, std::vector<std::vector<int>> map, int heightMap, int widthMap, int i, int j);
+	void updateBlocks();
 	void updateBlockDestruction();
+	void updateFall();
 	void update();
 
 	void renderMenu(sf::RenderTarget& target);
