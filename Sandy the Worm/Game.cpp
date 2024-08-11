@@ -8,17 +8,13 @@ void Game::initVariables()
 
 	this->gameActive = false;
 
-	this->sandBlockIsSpawned = false;
+	this->spawnActive = false;
+
+	this->youWonActive = false;
 
 	this->selectedLevel = 1;
 
-	this->mapSandBlocks = {
-		{1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1},
-		{1, 1, 1, 1, 1}
-	};
+	this->youWonTitleCounter = 0;
 }
 
 void Game::initWindow()
@@ -31,23 +27,9 @@ void Game::initWindow()
 	this->window->setFramerateLimit(60);
 }
 
-void Game::initTexture()
-{
-	if (!this->groundTexture.loadFromFile("Textures/ground.png"))
-	{
-		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
-	}
-}
-
-void Game::initSprite()
-{
-	this->groundSprite.setTexture(this->groundTexture);
-	this->groundSprite.setPosition(sf::Vector2f(0.f, 0.f));;
-}
-
 void Game::initFonts()
 {
-	if (!this->font.loadFromFile("Fonts/CourierPrime-Regular.ttf"))
+	if (!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
 	{
 		std::cout << "ERROR > Game::initFonts::Failed to load font!" << "\n";
 	}
@@ -55,7 +37,49 @@ void Game::initFonts()
 
 void Game::initText()
 {
+	this->menuText.setFont(this->font);
+	this->menuText.setCharacterSize(20);
+	this->menuText.setFillColor(sf::Color(211, 27, 89));
+	this->menuText.setString("Menu: M");
 
+	this->readyText.setFont(this->font);
+	this->readyText.setCharacterSize(20);
+	this->readyText.setFillColor(sf::Color(211, 27, 89));
+	this->readyText.setString("Ready: O");
+
+	this->resetText.setFont(this->font);
+	this->resetText.setCharacterSize(20);
+	this->resetText.setFillColor(sf::Color(211, 27, 89));
+	this->resetText.setString("Reset: R");
+
+	float indentation = (800 - this->menuText.getGlobalBounds().width - this->readyText.getGlobalBounds().width - this->resetText.getGlobalBounds().width) / 4;
+
+	this->menuText.setPosition(sf::Vector2f((float)indentation, 530.f));
+	this->readyText.setPosition(sf::Vector2f((float)indentation * 2 + this->menuText.getGlobalBounds().width, 530.f));
+	this->resetText.setPosition(sf::Vector2f((float)indentation * 3 + this->menuText.getGlobalBounds().width + this->readyText.getGlobalBounds().width, 530.f));
+}
+
+void Game::initTexture()
+{
+	if (!this->backgroundTexture.loadFromFile("Textures/background.png"))
+	{
+		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
+	}
+
+	if (!this->youWonTitleTexture.loadFromFile("Textures/you_won_title.png"))
+	{
+		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
+	}
+}
+
+void Game::initSprite()
+{
+	this->backgroundSprite.setTexture(this->backgroundTexture);
+	this->backgroundSprite.setPosition(sf::Vector2f(0.f, 0.f));;
+
+	this->youWonTitleSprite.setTexture(this->youWonTitleTexture);
+	this->youWonTitleSprite.setOrigin(this->getTextureCenterCoordinates(this->youWonTitleSprite));
+	this->youWonTitleSprite.setPosition(sf::Vector2f(0.f, 0.f) + this->getTextureCenterCoordinates(this->youWonTitleSprite));
 }
 
 void Game::initMenu()
@@ -65,6 +89,14 @@ void Game::initMenu()
 
 void Game::initLevels()
 {
+	this->mapSandBlocks = {
+		{1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 1}
+	};
+
 	switch (this->selectedLevel)
 	{
 	case 1:
@@ -142,10 +174,10 @@ Game::Game()
 {
 	this->initVariables();
 	this->initWindow();
-	this->initTexture();
-	this->initSprite();
 	this->initFonts();
 	this->initText();
+	this->initTexture();
+	this->initSprite();
 	this->initMenu();
 	this->initWorm();
 }
@@ -155,7 +187,12 @@ Game::~Game()
 	delete this->window;
 }
 
-const bool& Game::getGameActive() const
+sf::Vector2f Game::getTextureCenterCoordinates(sf::Sprite sprite)
+{
+	return sf::Vector2f(sprite.getTexture()->getSize().x * 0.5f, sprite.getTexture()->getSize().y * 0.5f);
+}
+
+bool Game::getGameActive()
 {
 	return this->gameActive;
 }
@@ -163,6 +200,34 @@ const bool& Game::getGameActive() const
 void Game::setGameActive(bool value)
 {
 	this->gameActive = value;
+}
+
+bool Game::getSpawnActive()
+{
+	return this->spawnActive;
+}
+
+void Game::setSpawnActive(bool value)
+{
+	this->spawnActive = value;
+}
+
+bool Game::getYouWonActive()
+{
+	return this->youWonActive;
+}
+
+void Game::setYouWonActive(bool value)
+{
+	this->youWonActive = value;
+}
+
+void Game::resetMapsAndBlocks()
+{
+	std::vector<std::vector<int>>().swap(this->mapSandBlocks);
+	std::vector<std::vector<int>>().swap(this->mapLevelSandBlocks);
+	std::vector<SandBlock*>().swap(this->sandBlocks);
+	std::vector<SandBlock*>().swap(this->levelSandBlocks);
 }
 
 void Game::resetKeys()
@@ -297,26 +362,15 @@ void Game::dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, c
 	}
 }
 
-void Game::spawnBlocks(std::vector<std::vector<int>> map, std::vector<SandBlock*> blocks, bool destructible, int x, int y)
+void Game::spawnBlocks(std::vector<std::vector<int>>& map, std::vector<SandBlock*>& blocks, bool destructible, int x, int y)
 {
-	for (int i = 0; i < this->mapSandBlocks.size(); i++)
+	for (int i = 0; i < map.size(); i++)
 	{
-		for (int j = 0; j < this->mapSandBlocks[0].size(); j++)
+		for (int j = 0; j < map[i].size(); j++)
 		{
-			if (this->mapSandBlocks[i][j] > 0)
+			if (map[i][j] > 0)
 			{
-				this->sandBlocks.push_back(new SandBlock(true, sf::Vector2f((float) (j + 1) * 40.f, (float) (i + 7) * 40.f)));
-			}
-		}
-	}
-
-	for (int i = 0; i < this->mapLevelSandBlocks.size(); i++)
-	{
-		for (int j = 0; j < this->mapLevelSandBlocks[0].size(); j++)
-		{
-			if (this->mapLevelSandBlocks[i][j] > 0)
-			{
-				this->levelSandBlocks.push_back(new SandBlock(false, sf::Vector2f((float)(j + 14) * 40.f, (float)(i + 7) * 40.f)));
+				blocks.push_back(new SandBlock(destructible, sf::Vector2f((float) (j + x) * 40.f, (float) (i + y) * 40.f)));
 			}
 		}
 	}
@@ -415,11 +469,11 @@ bool Game::wormIsFall(bool wormFalls, std::vector<SandBlock*> blocks, int x, int
 
 void Game::updateInput()
 {
-	if (!this->worm->getFallValue() && !this->getSandBlocksFallValues())
+	if (!this->worm->getFallValue() && !this->getSandBlocksFallValues() && !this->getYouWonActive())
 	{
-		std::vector<SandBlock*> vec;
-		vec.insert(vec.end(), this->sandBlocks.begin(), this->sandBlocks.end());
-		vec.insert(vec.end(), this->levelSandBlocks.begin(), this->levelSandBlocks.end());
+		std::vector<SandBlock*> allBlocks;
+		allBlocks.insert(allBlocks.end(), this->sandBlocks.begin(), this->sandBlocks.end());
+		allBlocks.insert(allBlocks.end(), this->levelSandBlocks.begin(), this->levelSandBlocks.end());
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
@@ -427,7 +481,7 @@ void Game::updateInput()
 			{
 				this->keyHeldA = true;
 				sf::Vector2f movePosition(-40.f, 0.f);
-				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, true, false);
@@ -443,7 +497,7 @@ void Game::updateInput()
 			{
 				this->keyHeldD = true;
 				sf::Vector2f movePosition(40.f, 0.f);
-				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, false, true);
@@ -459,7 +513,7 @@ void Game::updateInput()
 			{
 				this->keyHeldW = true;
 				sf::Vector2f movePosition(0.f, -40.f);
-				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, false, true, true);
@@ -475,7 +529,7 @@ void Game::updateInput()
 			{
 				this->keyHeldS = true;
 				sf::Vector2f movePosition(0.f, 40.f);
-				if (this->worm->wormCanMove(vec, this->worm->getWormHead()->getPosition() + movePosition))
+				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(false, true, true, true);
@@ -486,6 +540,29 @@ void Game::updateInput()
 			}
 		}
 		else this->resetKeys();
+
+		std::vector<SandBlock*>().swap(allBlocks);
+	}
+
+	if (this->getGameActive())
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
+		{
+			this->initMenu();
+			this->selectedLevel = 1;
+			this->setGameActive(false);
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
+		{
+			if (this->mapSandBlocks == this->mapLevelSandBlocks)
+			{
+				this->setYouWonActive(true);
+			}
+		}
+		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+		{
+			this->setSpawnActive(true);
+		}
 	}
 }
 
@@ -517,8 +594,9 @@ void Game::updatePressingButtons()
 			if (this->menu->getSpriteButtonPlay().getGlobalBounds().contains(this->mousePosView))
 			{
 				this->menu->getSpriteButtonPlay().setScale(sf::Vector2f(1.f, 1.f));
-				this->initLevels();
+
 				this->setGameActive(true);
+				this->setSpawnActive(true);
 
 				std::cout << "Level selected: " << this->selectedLevel << "\n\n";
 			}
@@ -571,12 +649,18 @@ void Game::updateBlockSides(SandBlock* block, std::vector<std::vector<int>> map,
 
 void Game::updateBlocks()
 {
-	if (!this->sandBlockIsSpawned)
+	if (this->getSpawnActive())
 	{
+		this->resetMapsAndBlocks();
+
+		this->initLevels();
+
 		this->spawnBlocks(this->mapSandBlocks, this->sandBlocks, true, 1, 7);
 		this->spawnBlocks(this->mapLevelSandBlocks, this->levelSandBlocks, false, 14, 7);
 
-		this->sandBlockIsSpawned = true;
+		this->initWorm();
+
+		this->setSpawnActive(false);
 	}
 
 	for (SandBlock* sandBlock : this->sandBlocks)
@@ -654,26 +738,24 @@ void Game::update()
 {
 	this->pollEvents();
 
-	if (!this->gameActive)
+	if (!this->getGameActive())
 	{
 		this->updateMenu();
-
-		if (this->menu->getGameStarted())
-		{
-			this->setGameActive(true);
-		}
 	}
 	else
 	{
-		this->updateInput();
+		if (!this->getYouWonActive())
+		{
+			this->updateInput();
 
-		this->updateWorm();
+			this->updateBlocks();
 
-		this->updateBlocks();
+			this->updateWorm();
 
-		this->updateBlockDestruction();
+			this->updateBlockDestruction();
 
-		this->updateFall();
+			this->updateFall();
+		}
 	}
 }
 
@@ -682,9 +764,21 @@ void Game::renderMenu(sf::RenderTarget& target)
 	this->menu->render(target);
 }
 
-void Game::renderGround(sf::RenderTarget& target)
+void Game::renderText(sf::RenderTarget& target)
 {
-	target.draw(this->groundSprite);
+	target.draw(this->menuText);
+	target.draw(this->readyText);
+	target.draw(this->resetText);
+}
+
+void Game::renderBackground(sf::RenderTarget& target)
+{
+	target.draw(this->backgroundSprite);
+}
+
+void Game::renderYouWonTitle(sf::RenderTarget& target)
+{
+	target.draw(this->youWonTitleSprite);
 }
 
 void Game::renderWorm(sf::RenderTarget& target)
@@ -692,7 +786,7 @@ void Game::renderWorm(sf::RenderTarget& target)
 	this->worm->render(target);
 }
 
-void Game::renderSandBlocks(sf::RenderTarget& target)
+void Game::renderBlocks(sf::RenderTarget& target)
 {
 	for (SandBlock* sandBlock : this->sandBlocks)
 	{
@@ -709,17 +803,48 @@ void Game::render()
 {
 	this->window->clear();
 
-	if (!this->gameActive)
+	if (!this->getGameActive())
 	{
 		this->renderMenu(*this->window);
 	}
 	else
 	{
-		this->renderGround(*this->window);
+		this->renderBackground(*this->window);
+
+		this->renderText(*this->window);
 
 		this->renderWorm(*this->window);
 
-		this->renderSandBlocks(*this->window);
+		this->renderBlocks(*this->window);
+
+		if (this->getYouWonActive())
+		{
+			this->renderYouWonTitle(*this->window);
+
+			this->youWonTitleCounter++;
+
+			if (this->youWonTitleCounter % 40 % 5 == 0)
+			{
+				if (this->youWonTitleCounter % 40 < 21 && this->youWonTitleCounter % 40 != 0)
+				{
+					this->youWonTitleSprite.setScale(this->youWonTitleSprite.getScale() + sf::Vector2f(0.1f, 0.1f));
+				}
+				else if (this->youWonTitleCounter % 40 > 20 || this->youWonTitleCounter % 40 == 0)
+				{
+					this->youWonTitleSprite.setScale(this->youWonTitleSprite.getScale() - sf::Vector2f(0.1f, 0.1f));
+				}
+			}
+
+			if (this->youWonTitleCounter >= 200)
+			{
+				this->youWonTitleCounter = 0;
+				this->setYouWonActive(false);
+
+				this->initMenu();
+				this->selectedLevel = 1;
+				this->setGameActive(false);
+			}
+		}
 	}
 	
 	this->window->display();

@@ -15,6 +15,11 @@ private:
 	sf::VideoMode videoMode;
 	sf::Event event;
 
+	sf::Font font;
+	sf::Text menuText;
+	sf::Text readyText;
+	sf::Text resetText;
+
 	Worm* worm;
 
 	Menu* menu;
@@ -25,17 +30,12 @@ private:
 
 	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
 
-	bool gameActive;
-	bool sandBlockIsSpawned;
+	bool gameActive, spawnActive, youWonActive;
 
-	sf::Font font;
-	sf::Text guiText;
-	sf::Text endGameText;
+	sf::Texture backgroundTexture, youWonTitleTexture;
+	sf::Sprite backgroundSprite, youWonTitleSprite;
 
-	sf::Texture groundTexture;
-	sf::Sprite groundSprite;
-
-	int selectedLevel;
+	int selectedLevel, youWonTitleCounter;
 
 	std::vector<std::vector<int>> mapSandBlocks;
 	std::vector<std::vector<int>> mapLevelSandBlocks;
@@ -62,10 +62,10 @@ private:
 
 	void initVariables();
 	void initWindow();
-	void initTexture();
-	void initSprite();
 	void initFonts();
 	void initText();
+	void initTexture();
+	void initSprite();
 	void initMenu();
 	void initLevels();
 	void initWorm();
@@ -76,8 +76,14 @@ public:
 	virtual ~Game();
 
 	//Accessors
-	const bool& getGameActive() const;
+	sf::Vector2f getTextureCenterCoordinates(sf::Sprite sprite);
+	bool getGameActive();
 	void setGameActive(bool value);
+	bool getSpawnActive();
+	void setSpawnActive(bool value);
+	bool getYouWonActive();
+	void setYouWonActive(bool value);
+	void resetMapsAndBlocks();
 	void resetKeys();
 
 	//Modifiers
@@ -90,7 +96,7 @@ public:
 	void dfs(int i, int j, const std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks);
 	void setSupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
 	void dropUnsupportedBlocks(std::vector<std::vector<int>>& mapSandBlocks, const std::vector<std::vector<bool>>& supportedSandBlocks, std::vector<std::vector<bool>>& sandBlocksOnWorm);
-	void spawnBlocks(std::vector<std::vector<int>> map, std::vector<SandBlock*> blocks, bool destructible, int x, int y);
+	void spawnBlocks(std::vector<std::vector<int>>& map, std::vector<SandBlock*>& blocks, bool destructible, int x, int y);
 	void moveIconLevels(int minIconLevel, int maxIconLevel, int resetIconLevel, int moveIconLevel, int extremeIconLevel, sf::Vector2f extremePosition, sf::Vector2f newPosition);
 	bool wormIsFall(bool wormFalls, std::vector<SandBlock*> blocks, int x, int y, bool destructible);
 
@@ -107,9 +113,11 @@ public:
 	void update();
 
 	void renderMenu(sf::RenderTarget& target);
-	void renderGround(sf::RenderTarget& target);
+	void renderText(sf::RenderTarget& target);
+	void renderBackground(sf::RenderTarget& target);
+	void renderYouWonTitle(sf::RenderTarget& target);
 	void renderWorm(sf::RenderTarget& target);
-	void renderSandBlocks(sf::RenderTarget& target);
+	void renderBlocks(sf::RenderTarget& target);
 	void render();
 
 	//Utils

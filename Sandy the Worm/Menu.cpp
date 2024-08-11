@@ -4,11 +4,26 @@ void Menu::initVariables()
 {
 	this->welcomeScreenActive = true;
 
-	this->gameStarted = false;
-
 	this->allIconLevels = { &this->spriteIconlvl1, &this->spriteIconlvl2, &this->spriteIconlvl3, &this->spriteIconlvl4, &this->spriteIconlvl5, &this->spriteIconlvl6 };
 
 	this->shownIconLevels = { { 4, &this->spriteIconlvl5 }, { 5, &this->spriteIconlvl6 }, { 0, &this->spriteIconlvl1 }, { 1, &this->spriteIconlvl2 }, { 2, &this->spriteIconlvl3 } };
+}
+
+void Menu::initFonts()
+{
+	if (!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
+	{
+		std::cout << "ERROR > Menu::initFonts::Failed to load font!" << "\n";
+	}
+}
+
+void Menu::initText()
+{
+	this->welcomeScreenText.setFont(this->font);
+	this->welcomeScreenText.setCharacterSize(24);
+	this->welcomeScreenText.setFillColor(sf::Color(211, 27, 89));
+	this->welcomeScreenText.setString("Press SPACE to continue");
+	this->welcomeScreenText.setPosition(sf::Vector2f((float) (800 - this->welcomeScreenText.getGlobalBounds().width) / 2, 550.f));
 }
 
 void Menu::initTexture()
@@ -151,6 +166,8 @@ void Menu::initPosition()
 Menu::Menu()
 {
 	this->initVariables();
+	this->initFonts();
+	this->initText();
 	this->initTexture();
 	this->initSprite();
 	this->initPosition();
@@ -191,16 +208,6 @@ void Menu::setWelcomeScreenActive(bool value)
 	this->welcomeScreenActive = value;
 }
 
-bool Menu::getGameStarted()
-{
-	return this->gameStarted;
-}
-
-void Menu::setGameStarted(bool value)
-{
-	this->gameStarted = value;
-}
-
 std::vector<sf::Sprite*>& Menu::getAllIconLevels()
 {
 	return this->allIconLevels;
@@ -222,13 +229,11 @@ void Menu::update()
 	{
 		this->updateWelcomeScreen();
 	}
-	else
-	{
-		if (this->getGameStarted())
-		{
-			this->setGameStarted(false);
-		}
-	}
+}
+
+void Menu::renderText(sf::RenderTarget& target)
+{
+	
 }
 
 void Menu::render(sf::RenderTarget& target)
@@ -238,6 +243,7 @@ void Menu::render(sf::RenderTarget& target)
 	if (this->getWelcomeScreenActive())
 	{
 		target.draw(this->spriteWelcomeTitle);
+		target.draw(this->welcomeScreenText);
 	}
 	else
 	{
@@ -247,7 +253,6 @@ void Menu::render(sf::RenderTarget& target)
 
 		for (auto icon : this->shownIconLevels)
 		{
-			//std::cout << icon.first << " zzzzzzzz \n";
 			target.draw(*icon.second);
 		}
 
