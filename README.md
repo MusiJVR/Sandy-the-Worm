@@ -14,7 +14,7 @@ The game is currently in beta testing, so there may be bugs in the game.
 
 ### Gameplay
 
-![Gameplay](docs/Gameplay.png)
+![Gameplay](docs/gameplay.png)
 
 ## Requirements
 
