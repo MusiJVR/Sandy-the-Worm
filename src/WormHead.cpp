@@ -10,9 +10,9 @@ void WormHead::initVariables()
 
 void WormHead::initTexture()
 {
-	if (!this->texture.loadFromFile("Textures/worm_head.png"))
+	if (!this->texture.loadFromFile("resources/textures/worm_head.png"))
 	{
-		std::cout << "ERROR > WormHead::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > WormHead::initTexture::Could not load texture file: " << "resources/textures/worm_head.png" << std::endl;
 	}
 }
 

@@ -25,24 +25,31 @@ void Game::initWindow()
 	this->window = new sf::RenderWindow(this->videoMode, "Sandy the Worm", sf::Style::Titlebar | sf::Style::Close);
 
 	this->window->setFramerateLimit(60);
+
+	if (!this->icon.loadFromFile("resources/textures/icon_sandy_the_worm.png"))
+	{
+		std::cerr << "ERROR > Game::initWindow::Cannot load icon file: " << "resources/textures/icon_sandy_the_worm.png" << std::endl;
+	}
+	
+	this->window->setIcon(this->icon.getSize().x, this->icon.getSize().y, this->icon.getPixelsPtr());
 }
 
 void Game::initAudioManager()
 {
 	this->audioManager = new AudioManager();
 
-	this->audioManager->playMusic("Sounds/alienblues.ogg", 50.0f, true);
-	this->audioManager->loadSound("button_click", "Sounds/button_click.wav");
-	this->audioManager->loadSound("you_won", "Sounds/you_won.wav");
-	this->audioManager->loadSound("worm_crawl", "Sounds/worm_crawl.wav");
-	this->audioManager->loadSound("sand_break", "Sounds/sand_break.wav");
+	this->audioManager->playMusic("resources/sounds/alienblues.ogg", 50.0f, true);
+	this->audioManager->loadSound("button_click", "resources/sounds/button_click.wav");
+	this->audioManager->loadSound("you_won", "resources/sounds/you_won.wav");
+	this->audioManager->loadSound("worm_crawl", "resources/sounds/worm_crawl.wav");
+	this->audioManager->loadSound("sand_break", "resources/sounds/sand_break.wav");
 }
 
 void Game::initFonts()
 {
-	if (!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
+	if (!this->font.loadFromFile("resources/Fonts/PressStart2P-Regular.ttf"))
 	{
-		std::cout << "ERROR > Game::initFonts::Failed to load font!" << "\n";
+		std::cerr << "ERROR > Game::initFonts::Failed to load font: " << "resources/Fonts/PressStart2P-Regular.ttf" << std::endl;
 	}
 }
 
@@ -72,14 +79,14 @@ void Game::initText()
 
 void Game::initTexture()
 {
-	if (!this->backgroundTexture.loadFromFile("Textures/background.png"))
+	if (!this->backgroundTexture.loadFromFile("resources/textures/background.png"))
 	{
-		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Game::initTexture::Could not load texture file: " << "resources/textures/background.png" << std::endl;
 	}
 
-	if (!this->youWonTitleTexture.loadFromFile("Textures/you_won_title.png"))
+	if (!this->youWonTitleTexture.loadFromFile("resources/textures/you_won_title.png"))
 	{
-		std::cout << "ERROR > Game::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Game::initTexture::Could not load texture file: " << "resources/textures/you_won_title.png" << std::endl;
 	}
 }
 
@@ -517,8 +524,6 @@ void Game::updateInput()
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, true, false);
 					this->worm->moveWorm();
-
-					std::cout << "A" << "\n";
 				}
 			}
 		}
@@ -534,8 +539,6 @@ void Game::updateInput()
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, false, true);
 					this->worm->moveWorm();
-
-					std::cout << "D" << "\n";
 				}
 			}
 		}
@@ -551,8 +554,6 @@ void Game::updateInput()
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, false, true, true);
 					this->worm->moveWorm();
-
-					std::cout << "W" << "\n";
 				}
 			}
 		}
@@ -568,8 +569,6 @@ void Game::updateInput()
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(false, true, true, true);
 					this->worm->moveWorm();
-
-					std::cout << "S" << "\n";
 				}
 			}
 		}
@@ -649,8 +648,6 @@ void Game::updatePressingButtons()
 
 				this->setGameActive(true);
 				this->setSpawnActive(true);
-
-				std::cout << "Level selected: " << this->selectedLevel << "\n\n";
 			}
 			else if (this->menu->getSpriteFirstButtonSwitch().getGlobalBounds().contains(this->mousePosView))
 			{

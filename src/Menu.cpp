@@ -11,9 +11,9 @@ void Menu::initVariables()
 
 void Menu::initFonts()
 {
-	if (!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
+	if (!this->font.loadFromFile("resources/fonts/PressStart2P-Regular.ttf"))
 	{
-		std::cout << "ERROR > Menu::initFonts::Failed to load font!" << "\n";
+		std::cerr << "ERROR > Menu::initFonts::Failed to load font: " << "resources/fonts/PressStart2P-Regular.ttf" << std::endl;
 	}
 }
 
@@ -28,59 +28,59 @@ void Menu::initText()
 
 void Menu::initTexture()
 {
-	if (!this->textureWelcomeScreen.loadFromFile("Textures/welcome_screen.png"))
+	if (!this->textureWelcomeScreen.loadFromFile("resources/textures/welcome_screen.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/welcome_screen.png" << std::endl;
 	}
 
-	if (!this->textureWelcomeTitle.loadFromFile("Textures/welcome_title.png"))
+	if (!this->textureWelcomeTitle.loadFromFile("resources/textures/welcome_title.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/welcome_title.png" << std::endl;
 	}
 
-	if (!this->textureButtonPlay.loadFromFile("Textures/button_play.png"))
+	if (!this->textureButtonPlay.loadFromFile("resources/textures/button_play.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/button_play.png" << std::endl;
 	}
 
-	if (!this->textureButtonSwitch.loadFromFile("Textures/button_switch.png"))
+	if (!this->textureButtonSwitch.loadFromFile("resources/textures/button_switch.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/button_switch.png" << std::endl;
 	}
 
-	if (!this->textureSelectedlvlFrame.loadFromFile("Textures/selected_lvl_frame.png"))
+	if (!this->textureSelectedlvlFrame.loadFromFile("resources/textures/selected_lvl_frame.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/selected_lvl_frame.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl1.loadFromFile("Textures/icon_lvl1.png"))
+	if (!this->textureIconlvl1.loadFromFile("resources/textures/icon_lvl1.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl1.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl2.loadFromFile("Textures/icon_lvl2.png"))
+	if (!this->textureIconlvl2.loadFromFile("resources/textures/icon_lvl2.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl2.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl3.loadFromFile("Textures/icon_lvl3.png"))
+	if (!this->textureIconlvl3.loadFromFile("resources/textures/icon_lvl3.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl3.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl4.loadFromFile("Textures/icon_lvl4.png"))
+	if (!this->textureIconlvl4.loadFromFile("resources/textures/icon_lvl4.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl4.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl5.loadFromFile("Textures/icon_lvl5.png"))
+	if (!this->textureIconlvl5.loadFromFile("resources/textures/icon_lvl5.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl5.png" << std::endl;
 	}
 
-	if (!this->textureIconlvl6.loadFromFile("Textures/icon_lvl6.png"))
+	if (!this->textureIconlvl6.loadFromFile("resources/textures/icon_lvl6.png"))
 	{
-		std::cout << "ERROR > Menu::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl6.png" << std::endl;
 	}
 }
 

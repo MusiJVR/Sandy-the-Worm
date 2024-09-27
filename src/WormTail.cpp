@@ -10,9 +10,9 @@ void WormTail::initVariables()
 
 void WormTail::initTexture()
 {
-	if (!this->texture.loadFromFile("Textures/worm_tail.png"))
+	if (!this->texture.loadFromFile("resources/textures/worm_tail.png"))
 	{
-		std::cout << "ERROR > WormTail::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > WormTail::initTexture::Could not load texture file: " << "resources/textures/worm_tail.png" << std::endl;
 	}
 }
 

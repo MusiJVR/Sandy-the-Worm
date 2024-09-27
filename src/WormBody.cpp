@@ -10,14 +10,14 @@ void WormBody::initVariables()
 
 void WormBody::initTexture()
 {
-	if (!this->texture.loadFromFile("Textures/worm_body.png"))
+	if (!this->texture.loadFromFile("resources/textures/worm_body.png"))
 	{
-		std::cout << "ERROR > WormBody::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > WormBody::initTexture::Could not load texture file: " << "resources/textures/worm_body.png" << std::endl;
 	}
 
-	if (!this->textureAngle.loadFromFile("Textures/worm_body_angle.png"))
+	if (!this->textureAngle.loadFromFile("resources/textures/worm_body_angle.png"))
 	{
-		std::cout << "ERROR > WormBody::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > WormBody::initTexture::Could not load texture file: " << "resources/textures/worm_body_angle.png" << std::endl;
 	}
 }
 

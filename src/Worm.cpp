@@ -61,27 +61,6 @@ bool Worm::wormCanMove(std::vector<SandBlock*> blocks, sf::Vector2f futurePositi
 		}
 	}
 
-	/*...
-	std::cout << "futX " << futurePosition.x << " " << this->bodyFirst->getPosition().x << " " << this->bodySecond->getPosition().x << " " << this->tail->getPosition().x << "\n";
-	std::cout << "futY " << futurePosition.y << " " << this->bodyFirst->getPosition().y << " " << this->bodySecond->getPosition().y << " " << this->tail->getPosition().y << "\n\n";
-	...*/
-	/*...*/
-	std::cout << "X " << wormPositions[0].x << " " << wormPositions[1].x << " " << wormPositions[2].x << " " << wormPositions[3].x << "\n";
-	std::cout << "Y " << wormPositions[0].y << " " << wormPositions[1].y << " " << wormPositions[2].y << " " << wormPositions[3].y << "\n";
-	/*...*/
-
-
-	//4Y vertical
-	/*unsigned i = 0;
-	for (sf::Vector2f pos : this->wormPositions)
-	{
-		if (futurePosition.x == pos.x) i++;
-
-		if (i == 4) {
-			if (futurePosition.y < this->wormPositions[3].y) canMove = false;
-		}
-	}*/
-
 	return canMove;
 }
 

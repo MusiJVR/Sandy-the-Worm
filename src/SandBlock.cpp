@@ -16,84 +16,84 @@ void SandBlock::initVariables(bool destructible)
 
 void SandBlock::initTexture()
 {
-	if (!this->texture.loadFromFile("Textures/sand_block.png"))
+	if (!this->texture.loadFromFile("resources/textures/sand_block.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block.png" << std::endl;
 	}
 
-	if (!this->textureTopLeft.loadFromFile("Textures/sand_block_top_left.png"))
+	if (!this->textureTopLeft.loadFromFile("resources/textures/sand_block_top_left.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_left.png" << std::endl;
 	}
 
-	if (!this->textureLeft.loadFromFile("Textures/sand_block_left.png"))
+	if (!this->textureLeft.loadFromFile("resources/textures/sand_block_left.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_left.png" << std::endl;
 	}
 
-	if (!this->textureBottomLeft.loadFromFile("Textures/sand_block_bottom_left.png"))
+	if (!this->textureBottomLeft.loadFromFile("resources/textures/sand_block_bottom_left.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_left.png" << std::endl;
 	}
 
-	if (!this->textureBottom.loadFromFile("Textures/sand_block_bottom.png"))
+	if (!this->textureBottom.loadFromFile("resources/textures/sand_block_bottom.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom.png" << std::endl;
 	}
 
-	if (!this->textureBottomRight.loadFromFile("Textures/sand_block_bottom_right.png"))
+	if (!this->textureBottomRight.loadFromFile("resources/textures/sand_block_bottom_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_right.png" << std::endl;
 	}
 
-	if (!this->textureRight.loadFromFile("Textures/sand_block_right.png"))
+	if (!this->textureRight.loadFromFile("resources/textures/sand_block_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_right.png" << std::endl;
 	}
 
-	if (!this->textureTopRight.loadFromFile("Textures/sand_block_top_right.png"))
+	if (!this->textureTopRight.loadFromFile("resources/textures/sand_block_top_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_right.png" << std::endl;
 	}
 
-	if (!this->textureTop.loadFromFile("Textures/sand_block_top.png"))
+	if (!this->textureTop.loadFromFile("resources/textures/sand_block_top.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top.png" << std::endl;
 	}
 
-	if (!this->textureTopBottom.loadFromFile("Textures/sand_block_top_bottom.png"))
+	if (!this->textureTopBottom.loadFromFile("resources/textures/sand_block_top_bottom.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom.png" << std::endl;
 	}
 
-	if (!this->textureLeftRight.loadFromFile("Textures/sand_block_left_right.png"))
+	if (!this->textureLeftRight.loadFromFile("resources/textures/sand_block_left_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_left_right.png" << std::endl;
 	}
 
-	if (!this->textureTopBottomLeft.loadFromFile("Textures/sand_block_top_bottom_left.png"))
+	if (!this->textureTopBottomLeft.loadFromFile("resources/textures/sand_block_top_bottom_left.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_left.png" << std::endl;
 	}
 
-	if (!this->textureTopBottomRight.loadFromFile("Textures/sand_block_top_bottom_right.png"))
+	if (!this->textureTopBottomRight.loadFromFile("resources/textures/sand_block_top_bottom_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_right.png" << std::endl;
 	}
 
-	if (!this->textureTopLeftRight.loadFromFile("Textures/sand_block_top_left_right.png"))
+	if (!this->textureTopLeftRight.loadFromFile("resources/textures/sand_block_top_left_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_left_right.png" << std::endl;
 	}
 
-	if (!this->textureBottomLeftRight.loadFromFile("Textures/sand_block_bottom_left_right.png"))
+	if (!this->textureBottomLeftRight.loadFromFile("resources/textures/sand_block_bottom_left_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_left_right.png" << std::endl;
 	}
 
-	if (!this->textureTopBottomLeftRight.loadFromFile("Textures/sand_block_top_bottom_left_right.png"))
+	if (!this->textureTopBottomLeftRight.loadFromFile("resources/textures/sand_block_top_bottom_left_right.png"))
 	{
-		std::cout << "ERROR > SandBlock::initTexture::Could not load texture file." << "\n";
+		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_left_right.png" << std::endl;
 	}
 }
 
