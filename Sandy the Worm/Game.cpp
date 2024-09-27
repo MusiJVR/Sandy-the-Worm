@@ -27,6 +27,17 @@ void Game::initWindow()
 	this->window->setFramerateLimit(60);
 }
 
+void Game::initAudioManager()
+{
+	this->audioManager = new AudioManager();
+
+	this->audioManager->playMusic("Sounds/alienblues.ogg", 50.0f, true);
+	this->audioManager->loadSound("button_click", "Sounds/button_click.wav");
+	this->audioManager->loadSound("you_won", "Sounds/you_won.wav");
+	this->audioManager->loadSound("worm_crawl", "Sounds/worm_crawl.wav");
+	this->audioManager->loadSound("sand_break", "Sounds/sand_break.wav");
+}
+
 void Game::initFonts()
 {
 	if (!this->font.loadFromFile("Fonts/PressStart2P-Regular.ttf"))
@@ -174,6 +185,7 @@ Game::Game()
 {
 	this->initVariables();
 	this->initWindow();
+	this->initAudioManager();
 	this->initFonts();
 	this->initText();
 	this->initTexture();
@@ -184,7 +196,13 @@ Game::Game()
 
 Game::~Game()
 {
+	delete this->audioManager;
 	delete this->window;
+}
+
+AudioManager* Game::getAudioManager()
+{
+	return this->audioManager;
 }
 
 sf::Vector2f Game::getTextureCenterCoordinates(sf::Sprite sprite)
@@ -230,12 +248,19 @@ void Game::resetMapsAndBlocks()
 	std::vector<SandBlock*>().swap(this->levelSandBlocks);
 }
 
-void Game::resetKeys()
+void Game::resetKeysWASD()
 {
 	this->keyHeldA = false;
 	this->keyHeldD = false;
 	this->keyHeldW = false;
 	this->keyHeldS = false;
+}
+
+void Game::resetKeysMOR()
+{
+	this->keyHeldM = false;
+	this->keyHeldO = false;
+	this->keyHeldR = false;
 }
 
 const bool Game::getWindowIsOpen() const
@@ -254,9 +279,14 @@ void Game::pollEvents()
 			break;
 		case sf::Event::KeyPressed:
 			if (this->event.key.code == sf::Keyboard::Escape)
+			{
 				this->window->close();
-			if (this->event.key.code == sf::Keyboard::Space)
+			}
+			if (this->event.key.code == sf::Keyboard::Space && this->menu->getWelcomeScreenActive())
+			{
+				this->audioManager->playSound("button_click");
 				this->menu->setWelcomeScreenActive(false);
+			}
 			break;
 		}
 	}
@@ -483,6 +513,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(-40.f, 0.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
+					this->audioManager->playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, true, false);
 					this->worm->moveWorm();
@@ -499,6 +530,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(40.f, 0.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
+					this->audioManager->playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, false, true);
 					this->worm->moveWorm();
@@ -515,6 +547,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(0.f, -40.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
+					this->audioManager->playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, false, true, true);
 					this->worm->moveWorm();
@@ -531,6 +564,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(0.f, 40.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
+					this->audioManager->playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(false, true, true, true);
 					this->worm->moveWorm();
@@ -539,7 +573,7 @@ void Game::updateInput()
 				}
 			}
 		}
-		else this->resetKeys();
+		else this->resetKeysWASD();
 
 		std::vector<SandBlock*>().swap(allBlocks);
 	}
@@ -548,21 +582,38 @@ void Game::updateInput()
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
 		{
-			this->initMenu();
-			this->selectedLevel = 1;
-			this->setGameActive(false);
+			if (!this->keyHeldM)
+			{
+				this->keyHeldM = true;
+				this->audioManager->playSound("button_click");
+				this->initMenu();
+				this->selectedLevel = 1;
+				this->setGameActive(false);
+			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::O))
 		{
-			if (this->mapSandBlocks == this->mapLevelSandBlocks)
+			if (!this->keyHeldO)
 			{
-				this->setYouWonActive(true);
+				this->keyHeldO = true;
+				this->audioManager->playSound("button_click");
+				if (this->mapSandBlocks == this->mapLevelSandBlocks)
+				{
+					this->audioManager->playSound("you_won");
+					this->setYouWonActive(true);
+				}
 			}
 		}
 		else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 		{
-			this->setSpawnActive(true);
+			if (!this->keyHeldR)
+			{
+				this->keyHeldR = true;
+				this->audioManager->playSound("button_click");
+				this->setSpawnActive(true);
+			}
 		}
+		else this->resetKeysMOR();
 	}
 }
 
@@ -593,6 +644,7 @@ void Game::updatePressingButtons()
 			this->mouseHeld = true;
 			if (this->menu->getSpriteButtonPlay().getGlobalBounds().contains(this->mousePosView))
 			{
+				this->audioManager->playSound("button_click");
 				this->menu->getSpriteButtonPlay().setScale(sf::Vector2f(1.f, 1.f));
 
 				this->setGameActive(true);
@@ -602,10 +654,12 @@ void Game::updatePressingButtons()
 			}
 			else if (this->menu->getSpriteFirstButtonSwitch().getGlobalBounds().contains(this->mousePosView))
 			{
+				this->audioManager->playSound("button_click");
 				this->moveIconLevels(this->selectedLevel, this->menu->getAllIconLevels().size(), 1, 1, 4, sf::Vector2f(204.f, 213.f), sf::Vector2f(558.f, 175.f));
 			}
 			else if (this->menu->getSpriteSecondButtonSwitch().getGlobalBounds().contains(this->mousePosView))
 			{
+				this->audioManager->playSound("button_click");
 				this->moveIconLevels(1, this->selectedLevel, this->menu->getAllIconLevels().size(), -1, 0, sf::Vector2f(596.f, 213.f), sf::Vector2f(166.f, 175.f));
 			}
 		}
@@ -730,6 +784,8 @@ void Game::updateBlockDestruction()
 			this->mapSandBlocks[iMap][jMap] = 0;
 
 			this->sandBlocks.erase(this->sandBlocks.begin() + i);
+
+			this->audioManager->playSound("sand_break");
 		}
 	}
 }

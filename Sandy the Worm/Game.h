@@ -5,6 +5,7 @@
 #include <vector>
 #include <sstream>
 
+#include "AudioManager.h"
 #include "Menu.h"
 #include "Worm.h"
 
@@ -20,6 +21,8 @@ private:
 	sf::Text readyText;
 	sf::Text resetText;
 
+	AudioManager* audioManager;
+
 	Worm* worm;
 
 	Menu* menu;
@@ -28,7 +31,7 @@ private:
 	sf::Vector2f mousePosView;
 	bool mouseHeld;
 
-	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS;
+	bool keyHeldA, keyHeldD, keyHeldW, keyHeldS, keyHeldM, keyHeldO, keyHeldR;
 
 	bool gameActive, spawnActive, youWonActive;
 
@@ -62,6 +65,7 @@ private:
 
 	void initVariables();
 	void initWindow();
+	void initAudioManager();
 	void initFonts();
 	void initText();
 	void initTexture();
@@ -76,6 +80,7 @@ public:
 	virtual ~Game();
 
 	//Accessors
+	AudioManager* getAudioManager();
 	sf::Vector2f getTextureCenterCoordinates(sf::Sprite sprite);
 	bool getGameActive();
 	void setGameActive(bool value);
@@ -84,7 +89,8 @@ public:
 	bool getYouWonActive();
 	void setYouWonActive(bool value);
 	void resetMapsAndBlocks();
-	void resetKeys();
+	void resetKeysWASD();
+	void resetKeysMOR();
 
 	//Modifiers
 
