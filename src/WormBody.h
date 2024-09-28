@@ -1,13 +1,10 @@
 #pragma once
 
-#include <iostream>
-
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 
 class WormBody
 {
 private:
-	sf::Texture texture, textureAngle;
 	sf::Sprite sprite;
 
 	sf::Vector2f followPosition;

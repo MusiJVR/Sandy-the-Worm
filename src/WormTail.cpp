@@ -10,15 +10,12 @@ void WormTail::initVariables()
 
 void WormTail::initTexture()
 {
-	if (!this->texture.loadFromFile("resources/textures/worm_tail.png"))
-	{
-		std::cerr << "ERROR > WormTail::initTexture::Could not load texture file: " << "resources/textures/worm_tail.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("worm_tail", "resources/textures/worm_tail.png");
 }
 
 void WormTail::initSprite()
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(TextureManager::getInstance().getTexture("worm_tail"));
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 

@@ -28,99 +28,56 @@ void Menu::initText()
 
 void Menu::initTexture()
 {
-	if (!this->textureWelcomeScreen.loadFromFile("resources/textures/welcome_screen.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/welcome_screen.png" << std::endl;
-	}
-
-	if (!this->textureWelcomeTitle.loadFromFile("resources/textures/welcome_title.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/welcome_title.png" << std::endl;
-	}
-
-	if (!this->textureButtonPlay.loadFromFile("resources/textures/button_play.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/button_play.png" << std::endl;
-	}
-
-	if (!this->textureButtonSwitch.loadFromFile("resources/textures/button_switch.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/button_switch.png" << std::endl;
-	}
-
-	if (!this->textureSelectedlvlFrame.loadFromFile("resources/textures/selected_lvl_frame.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/selected_lvl_frame.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl1.loadFromFile("resources/textures/icon_lvl1.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl1.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl2.loadFromFile("resources/textures/icon_lvl2.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl2.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl3.loadFromFile("resources/textures/icon_lvl3.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl3.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl4.loadFromFile("resources/textures/icon_lvl4.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl4.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl5.loadFromFile("resources/textures/icon_lvl5.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl5.png" << std::endl;
-	}
-
-	if (!this->textureIconlvl6.loadFromFile("resources/textures/icon_lvl6.png"))
-	{
-		std::cerr << "ERROR > Menu::initTexture::Could not load texture file: " << "resources/textures/icon_lvl6.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("welcome_screen", "resources/textures/welcome_screen.png");
+	TextureManager::getInstance().loadTexture("welcome_title", "resources/textures/welcome_title.png");
+	TextureManager::getInstance().loadTexture("button_play", "resources/textures/button_play.png");
+	TextureManager::getInstance().loadTexture("button_switch", "resources/textures/button_switch.png");
+	TextureManager::getInstance().loadTexture("selected_lvl_frame", "resources/textures/selected_lvl_frame.png");
+	TextureManager::getInstance().loadTexture("icon_lvl1", "resources/textures/icon_lvl1.png");
+	TextureManager::getInstance().loadTexture("icon_lvl2", "resources/textures/icon_lvl2.png");
+	TextureManager::getInstance().loadTexture("icon_lvl3", "resources/textures/icon_lvl3.png");
+	TextureManager::getInstance().loadTexture("icon_lvl4", "resources/textures/icon_lvl4.png");
+	TextureManager::getInstance().loadTexture("icon_lvl5", "resources/textures/icon_lvl5.png");
+	TextureManager::getInstance().loadTexture("icon_lvl6", "resources/textures/icon_lvl6.png");
 }
 
 void Menu::initSprite()
 {
-	this->spriteWelcomeScreen.setTexture(this->textureWelcomeScreen);
+	this->spriteWelcomeScreen.setTexture(TextureManager::getInstance().getTexture("welcome_screen"));
 	this->spriteWelcomeScreen.setTextureRect(sf::IntRect(0, 0, 800, 600));
 
-	this->spriteWelcomeTitle.setTexture(this->textureWelcomeTitle);
+	this->spriteWelcomeTitle.setTexture(TextureManager::getInstance().getTexture("welcome_title"));
 	this->spriteWelcomeTitle.setTextureRect(sf::IntRect(0, 0, 800, 600));
 
-	this->spriteButtonPlay.setTexture(this->textureButtonPlay);
+	this->spriteButtonPlay.setTexture(TextureManager::getInstance().getTexture("button_play"));
 	this->spriteButtonPlay.setTextureRect(sf::IntRect(0, 0, 300, 100));
 
-	this->spriteFirstButtonSwitch.setTexture(this->textureButtonSwitch);
+	this->spriteFirstButtonSwitch.setTexture(TextureManager::getInstance().getTexture("button_switch"));
 	this->spriteFirstButtonSwitch.setTextureRect(sf::IntRect(0, 0, 25, 40));
 
-	this->spriteSecondButtonSwitch.setTexture(this->textureButtonSwitch);
+	this->spriteSecondButtonSwitch.setTexture(TextureManager::getInstance().getTexture("button_switch"));
 	this->spriteSecondButtonSwitch.setTextureRect(sf::IntRect(0, 0, 25, 40));
 	this->spriteSecondButtonSwitch.setScale(sf::Vector2f(-1.f, 1.f));
 
-	this->spriteSelectedlvlFrame.setTexture(this->textureSelectedlvlFrame);
+	this->spriteSelectedlvlFrame.setTexture(TextureManager::getInstance().getTexture("selected_lvl_frame"));
 	this->spriteSelectedlvlFrame.setTextureRect(sf::IntRect(0, 0, 84, 84));
 
-	this->spriteIconlvl1.setTexture(this->textureIconlvl1);
+	this->spriteIconlvl1.setTexture(TextureManager::getInstance().getTexture("icon_lvl1"));
 	this->spriteIconlvl1.setTextureRect(sf::IntRect(0, 0, 76, 76));
 
-	this->spriteIconlvl2.setTexture(this->textureIconlvl2);
+	this->spriteIconlvl2.setTexture(TextureManager::getInstance().getTexture("icon_lvl2"));
 	this->spriteIconlvl2.setTextureRect(sf::IntRect(0, 0, 76, 76));
 
-	this->spriteIconlvl3.setTexture(this->textureIconlvl3);
+	this->spriteIconlvl3.setTexture(TextureManager::getInstance().getTexture("icon_lvl3"));
 	this->spriteIconlvl3.setTextureRect(sf::IntRect(0, 0, 76, 76));
 
-	this->spriteIconlvl4.setTexture(this->textureIconlvl4);
+	this->spriteIconlvl4.setTexture(TextureManager::getInstance().getTexture("icon_lvl4"));
 	this->spriteIconlvl4.setTextureRect(sf::IntRect(0, 0, 76, 76));
 
-	this->spriteIconlvl5.setTexture(this->textureIconlvl5);
+	this->spriteIconlvl5.setTexture(TextureManager::getInstance().getTexture("icon_lvl5"));
 	this->spriteIconlvl5.setTextureRect(sf::IntRect(0, 0, 76, 76));
 
-	this->spriteIconlvl6.setTexture(this->textureIconlvl6);
+	this->spriteIconlvl6.setTexture(TextureManager::getInstance().getTexture("icon_lvl6"));
 	this->spriteIconlvl6.setTextureRect(sf::IntRect(0, 0, 76, 76));
 }
 

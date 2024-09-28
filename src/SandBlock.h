@@ -1,28 +1,10 @@
 #pragma once
 
-#include <iostream>
-
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 
 class SandBlock
 {
 private:
-	sf::Texture texture,
-		textureTopLeft,
-		textureLeft,
-		textureBottomLeft,
-		textureBottom,
-		textureBottomRight,
-		textureRight,
-		textureTopRight,
-		textureTop,
-		textureTopBottom,
-		textureLeftRight,
-		textureTopBottomLeft,
-		textureTopBottomRight,
-		textureTopLeftRight,
-		textureBottomLeftRight,
-		textureTopBottomLeftRight;
 	sf::Sprite sprite;
 
 	bool topSide, bottomSide, leftSide, rightSide, sandBlockFalls, destructible;

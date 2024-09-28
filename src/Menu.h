@@ -1,23 +1,10 @@
 #pragma once
 
-#include <iostream>
-
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 
 class Menu
 {
 private:
-	sf::Texture textureWelcomeScreen,
-		textureWelcomeTitle,
-		textureButtonPlay,
-		textureButtonSwitch,
-		textureSelectedlvlFrame,
-		textureIconlvl1,
-		textureIconlvl2,
-		textureIconlvl3,
-		textureIconlvl4,
-		textureIconlvl5,
-		textureIconlvl6;
 	sf::Sprite spriteWelcomeScreen,
 		spriteWelcomeTitle,
 		spriteButtonPlay,

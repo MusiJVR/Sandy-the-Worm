@@ -10,20 +10,13 @@ void WormBody::initVariables()
 
 void WormBody::initTexture()
 {
-	if (!this->texture.loadFromFile("resources/textures/worm_body.png"))
-	{
-		std::cerr << "ERROR > WormBody::initTexture::Could not load texture file: " << "resources/textures/worm_body.png" << std::endl;
-	}
-
-	if (!this->textureAngle.loadFromFile("resources/textures/worm_body_angle.png"))
-	{
-		std::cerr << "ERROR > WormBody::initTexture::Could not load texture file: " << "resources/textures/worm_body_angle.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("worm_body", "resources/textures/worm_body.png");
+	TextureManager::getInstance().loadTexture("worm_body_angle", "resources/textures/worm_body_angle.png");
 }
 
 void WormBody::initSprite()
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(TextureManager::getInstance().getTexture("worm_body"));
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 
@@ -108,7 +101,7 @@ void WormBody::setSides(bool top, bool bottom, bool left, bool right)
 
 void WormBody::updateRotation(bool top, bool bottom, bool left, bool right)
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(TextureManager::getInstance().getTexture("worm_body"));
 	if (!top && !bottom && left && right)
 	{
 		this->sprite.setRotation(0.f);
@@ -119,7 +112,7 @@ void WormBody::updateRotation(bool top, bool bottom, bool left, bool right)
 	}
 	else
 	{
-		this->sprite.setTexture(this->textureAngle);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("worm_body_angle"));
 		if (top && !bottom && !left && right)
 		{
 			this->sprite.setRotation(0.f);

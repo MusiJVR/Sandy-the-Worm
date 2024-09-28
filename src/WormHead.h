@@ -1,13 +1,10 @@
 #pragma once
 
-#include <iostream>
-
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 
 class WormHead
 {
 private:
-	sf::Texture texture;
 	sf::Sprite sprite;
 
 	bool topSide, bottomSide, leftSide, rightSide;

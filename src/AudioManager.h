@@ -23,7 +23,7 @@ public:
 
     void playMusic(std::string filename, float volume, bool loop);
     void stopMusic();
-    void playSound(std::string soundName);
     void loadSound(std::string soundName, std::string filename);
+    void playSound(std::string soundName);
     void cleanup();
 };

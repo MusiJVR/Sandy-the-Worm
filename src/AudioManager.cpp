@@ -10,14 +10,16 @@ AudioManager::~AudioManager()
     this->cleanup();
 }
 
-AudioManager& AudioManager::getInstance() {
+AudioManager& AudioManager::getInstance()
+{
     static AudioManager instance;
     return instance;
 }
 
 void AudioManager::playMusic(std::string filename, float volume, bool loop)
 {
-    if (!this->music.openFromFile(filename)) {
+    if (!this->music.openFromFile(filename))
+    {
         std::cerr << "ERROR > AudioManager::playMusic::Cannot load music file: " << filename << std::endl;
         return;
     }
@@ -32,9 +34,22 @@ void AudioManager::stopMusic()
     this->music.stop();
 }
 
+void AudioManager::loadSound(std::string soundName, std::string filename)
+{
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile(filename))
+    {
+        std::cerr << "ERROR > AudioManager::loadSound::Cannot load sound file: " << filename << std::endl;
+        return;
+    }
+
+    this->soundBuffers[soundName] = std::move(buffer);
+}
+
 void AudioManager::playSound(std::string soundName)
 {
-    if (this->soundBuffers.find(soundName) == this->soundBuffers.end()) {
+    if (this->soundBuffers.find(soundName) == this->soundBuffers.end())
+    {
         std::cerr << "ERROR > AudioManager::playSound::Sound not found: " << soundName << std::endl;
         return;
     }
@@ -46,21 +61,9 @@ void AudioManager::playSound(std::string soundName)
     this->sounds.push_back(std::move(sound));
 }
 
-void AudioManager::loadSound(std::string soundName, std::string filename)
-{
-    sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile(filename)) {
-        std::cerr << "ERROR > AudioManager::loadSound::Cannot load sound file: " << filename << std::endl;
-        return;
-    }
-
-    this->soundBuffers[soundName] = std::move(buffer);
-}
-
 void AudioManager::cleanup()
 {
     this->stopMusic();
     this->soundBuffers.clear();
     this->sounds.clear();
-    std::cout << "sdads\n";
 }

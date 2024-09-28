@@ -1,13 +1,10 @@
 #pragma once
 
-#include <iostream>
-
-#include <SFML/Graphics.hpp>
+#include "TextureManager.h"
 
 class WormTail
 {
 private:
-	sf::Texture texture;
 	sf::Sprite sprite;
 
 	sf::Vector2f followPosition;

@@ -30,7 +30,6 @@ private:
 
 	bool gameActive, spawnActive, youWonActive;
 
-	sf::Texture backgroundTexture, youWonTitleTexture;
 	sf::Sprite backgroundSprite, youWonTitleSprite;
 
 	int selectedLevel, youWonTitleCounter;

@@ -16,90 +16,27 @@ void SandBlock::initVariables(bool destructible)
 
 void SandBlock::initTexture()
 {
-	if (!this->texture.loadFromFile("resources/textures/sand_block.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block.png" << std::endl;
-	}
-
-	if (!this->textureTopLeft.loadFromFile("resources/textures/sand_block_top_left.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_left.png" << std::endl;
-	}
-
-	if (!this->textureLeft.loadFromFile("resources/textures/sand_block_left.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_left.png" << std::endl;
-	}
-
-	if (!this->textureBottomLeft.loadFromFile("resources/textures/sand_block_bottom_left.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_left.png" << std::endl;
-	}
-
-	if (!this->textureBottom.loadFromFile("resources/textures/sand_block_bottom.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom.png" << std::endl;
-	}
-
-	if (!this->textureBottomRight.loadFromFile("resources/textures/sand_block_bottom_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_right.png" << std::endl;
-	}
-
-	if (!this->textureRight.loadFromFile("resources/textures/sand_block_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_right.png" << std::endl;
-	}
-
-	if (!this->textureTopRight.loadFromFile("resources/textures/sand_block_top_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_right.png" << std::endl;
-	}
-
-	if (!this->textureTop.loadFromFile("resources/textures/sand_block_top.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top.png" << std::endl;
-	}
-
-	if (!this->textureTopBottom.loadFromFile("resources/textures/sand_block_top_bottom.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom.png" << std::endl;
-	}
-
-	if (!this->textureLeftRight.loadFromFile("resources/textures/sand_block_left_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_left_right.png" << std::endl;
-	}
-
-	if (!this->textureTopBottomLeft.loadFromFile("resources/textures/sand_block_top_bottom_left.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_left.png" << std::endl;
-	}
-
-	if (!this->textureTopBottomRight.loadFromFile("resources/textures/sand_block_top_bottom_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_right.png" << std::endl;
-	}
-
-	if (!this->textureTopLeftRight.loadFromFile("resources/textures/sand_block_top_left_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_left_right.png" << std::endl;
-	}
-
-	if (!this->textureBottomLeftRight.loadFromFile("resources/textures/sand_block_bottom_left_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_bottom_left_right.png" << std::endl;
-	}
-
-	if (!this->textureTopBottomLeftRight.loadFromFile("resources/textures/sand_block_top_bottom_left_right.png"))
-	{
-		std::cerr << "ERROR > SandBlock::initTexture::Could not load texture file: " << "resources/textures/sand_block_top_bottom_left_right.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("sand_block", "resources/textures/sand_block.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_left", "resources/textures/sand_block_top_left.png");
+	TextureManager::getInstance().loadTexture("sand_block_left", "resources/textures/sand_block_left.png");
+	TextureManager::getInstance().loadTexture("sand_block_bottom_left", "resources/textures/sand_block_bottom_left.png");
+	TextureManager::getInstance().loadTexture("sand_block_bottom", "resources/textures/sand_block_bottom.png");
+	TextureManager::getInstance().loadTexture("sand_block_bottom_right", "resources/textures/sand_block_bottom_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_right", "resources/textures/sand_block_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_right", "resources/textures/sand_block_top_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_top", "resources/textures/sand_block_top.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_bottom", "resources/textures/sand_block_top_bottom.png");
+	TextureManager::getInstance().loadTexture("sand_block_left_right", "resources/textures/sand_block_left_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_bottom_left", "resources/textures/sand_block_top_bottom_left.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_bottom_right", "resources/textures/sand_block_top_bottom_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_left_right", "resources/textures/sand_block_top_left_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_bottom_left_right", "resources/textures/sand_block_bottom_left_right.png");
+	TextureManager::getInstance().loadTexture("sand_block_top_bottom_left_right", "resources/textures/sand_block_top_bottom_left_right.png");
 }
 
 void SandBlock::initSprite()
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block"));
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 
 	if (!this->isDestructible())
@@ -199,67 +136,67 @@ void SandBlock::updateTexture(bool top, bool bottom, bool left, bool right)
 {
 	if (!top && !bottom && !left && !right)
 	{
-		this->sprite.setTexture(this->texture);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block"));
 	}
 	else if (top && !bottom && left && !right)
 	{
-		this->sprite.setTexture(this->textureTopLeft);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_left"));
 	}
 	else if (!top && !bottom && left && !right)
 	{
-		this->sprite.setTexture(this->textureLeft);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_left"));
 	}
 	else if (!top && bottom && left && !right)
 	{
-		this->sprite.setTexture(this->textureBottomLeft);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_bottom_left"));
 	}
 	else if (!top && bottom && !left && !right)
 	{
-		this->sprite.setTexture(this->textureBottom);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_bottom"));
 	}
 	else if (!top && bottom && !left && right)
 	{
-		this->sprite.setTexture(this->textureBottomRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_bottom_right"));
 	}
 	else if (!top && !bottom && !left && right)
 	{
-		this->sprite.setTexture(this->textureRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_right"));
 	}
 	else if (top && !bottom && !left && right)
 	{
-		this->sprite.setTexture(this->textureTopRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_right"));
 	}
 	else if (top && !bottom && !left && !right)
 	{
-		this->sprite.setTexture(this->textureTop);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top"));
 	}
 	else if (top && bottom && !left && !right)
 	{
-		this->sprite.setTexture(this->textureTopBottom);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_bottom"));
 	}
 	else if (!top && !bottom && left && right)
 	{
-		this->sprite.setTexture(this->textureLeftRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_left_right"));
 	}
 	else if (top && bottom && left && !right)
 	{
-		this->sprite.setTexture(this->textureTopBottomLeft);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_bottom_left"));
 	}
 	else if (top && bottom && !left && right)
 	{
-		this->sprite.setTexture(this->textureTopBottomRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_bottom_right"));
 	}
 	else if (top && !bottom && left && right)
 	{
-		this->sprite.setTexture(this->textureTopLeftRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_left_right"));
 	}
 	else if (!top && bottom && left && right)
 	{
-		this->sprite.setTexture(this->textureBottomLeftRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_bottom_left_right"));
 	}
 	else if (top && bottom && left && right)
 	{
-		this->sprite.setTexture(this->textureTopBottomLeftRight);
+		this->sprite.setTexture(TextureManager::getInstance().getTexture("sand_block_top_bottom_left_right"));
 	}
 
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));

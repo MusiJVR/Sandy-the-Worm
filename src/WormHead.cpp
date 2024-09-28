@@ -10,15 +10,12 @@ void WormHead::initVariables()
 
 void WormHead::initTexture()
 {
-	if (!this->texture.loadFromFile("resources/textures/worm_head.png"))
-	{
-		std::cerr << "ERROR > WormHead::initTexture::Could not load texture file: " << "resources/textures/worm_head.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("worm_head", "resources/textures/worm_head.png");
 }
 
 void WormHead::initSprite()
 {
-	this->sprite.setTexture(this->texture);
+	this->sprite.setTexture(TextureManager::getInstance().getTexture("worm_head"));
 	this->sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 }
 

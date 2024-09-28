@@ -77,23 +77,16 @@ void Game::initText()
 
 void Game::initTexture()
 {
-	if (!this->backgroundTexture.loadFromFile("resources/textures/background.png"))
-	{
-		std::cerr << "ERROR > Game::initTexture::Could not load texture file: " << "resources/textures/background.png" << std::endl;
-	}
-
-	if (!this->youWonTitleTexture.loadFromFile("resources/textures/you_won_title.png"))
-	{
-		std::cerr << "ERROR > Game::initTexture::Could not load texture file: " << "resources/textures/you_won_title.png" << std::endl;
-	}
+	TextureManager::getInstance().loadTexture("background", "resources/textures/background.png");
+	TextureManager::getInstance().loadTexture("you_won_title", "resources/textures/you_won_title.png");
 }
 
 void Game::initSprite()
 {
-	this->backgroundSprite.setTexture(this->backgroundTexture);
+	this->backgroundSprite.setTexture(TextureManager::getInstance().getTexture("background"));
 	this->backgroundSprite.setPosition(sf::Vector2f(0.f, 0.f));;
 
-	this->youWonTitleSprite.setTexture(this->youWonTitleTexture);
+	this->youWonTitleSprite.setTexture(TextureManager::getInstance().getTexture("you_won_title"));
 	this->youWonTitleSprite.setOrigin(this->getTextureCenterCoordinates(this->youWonTitleSprite));
 	this->youWonTitleSprite.setPosition(sf::Vector2f(0.f, 0.f) + this->getTextureCenterCoordinates(this->youWonTitleSprite));
 }
