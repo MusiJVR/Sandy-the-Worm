@@ -34,15 +34,13 @@ void Game::initWindow()
 	this->window->setIcon(this->icon.getSize().x, this->icon.getSize().y, this->icon.getPixelsPtr());
 }
 
-void Game::initAudioManager()
+void Game::initAudio()
 {
-	this->audioManager = new AudioManager();
-
-	this->audioManager->playMusic("resources/sounds/alienblues.ogg", 50.0f, true);
-	this->audioManager->loadSound("button_click", "resources/sounds/button_click.wav");
-	this->audioManager->loadSound("you_won", "resources/sounds/you_won.wav");
-	this->audioManager->loadSound("worm_crawl", "resources/sounds/worm_crawl.wav");
-	this->audioManager->loadSound("sand_break", "resources/sounds/sand_break.wav");
+	AudioManager::getInstance().playMusic("resources/sounds/alienblues.ogg", 50.0f, true);
+	AudioManager::getInstance().loadSound("button_click", "resources/sounds/button_click.wav");
+	AudioManager::getInstance().loadSound("you_won", "resources/sounds/you_won.wav");
+	AudioManager::getInstance().loadSound("worm_crawl", "resources/sounds/worm_crawl.wav");
+	AudioManager::getInstance().loadSound("sand_break", "resources/sounds/sand_break.wav");
 }
 
 void Game::initFonts()
@@ -192,7 +190,7 @@ Game::Game()
 {
 	this->initVariables();
 	this->initWindow();
-	this->initAudioManager();
+	this->initAudio();
 	this->initFonts();
 	this->initText();
 	this->initTexture();
@@ -203,13 +201,7 @@ Game::Game()
 
 Game::~Game()
 {
-	delete this->audioManager;
 	delete this->window;
-}
-
-AudioManager* Game::getAudioManager()
-{
-	return this->audioManager;
 }
 
 sf::Vector2f Game::getTextureCenterCoordinates(sf::Sprite sprite)
@@ -291,7 +283,7 @@ void Game::pollEvents()
 			}
 			if (this->event.key.code == sf::Keyboard::Space && this->menu->getWelcomeScreenActive())
 			{
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->menu->setWelcomeScreenActive(false);
 			}
 			break;
@@ -520,7 +512,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(-40.f, 0.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
-					this->audioManager->playSound("worm_crawl");
+					AudioManager::getInstance().playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, true, false);
 					this->worm->moveWorm();
@@ -535,7 +527,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(40.f, 0.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
-					this->audioManager->playSound("worm_crawl");
+					AudioManager::getInstance().playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, true, false, true);
 					this->worm->moveWorm();
@@ -550,7 +542,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(0.f, -40.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
-					this->audioManager->playSound("worm_crawl");
+					AudioManager::getInstance().playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(true, false, true, true);
 					this->worm->moveWorm();
@@ -565,7 +557,7 @@ void Game::updateInput()
 				sf::Vector2f movePosition(0.f, 40.f);
 				if (this->worm->wormCanMove(allBlocks, this->worm->getWormHead()->getPosition() + movePosition))
 				{
-					this->audioManager->playSound("worm_crawl");
+					AudioManager::getInstance().playSound("worm_crawl");
 					this->worm->getWormHead()->moveSprite(movePosition);
 					this->worm->getWormHead()->setSides(false, true, true, true);
 					this->worm->moveWorm();
@@ -584,7 +576,7 @@ void Game::updateInput()
 			if (!this->keyHeldM)
 			{
 				this->keyHeldM = true;
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->initMenu();
 				this->selectedLevel = 1;
 				this->setGameActive(false);
@@ -595,10 +587,10 @@ void Game::updateInput()
 			if (!this->keyHeldO)
 			{
 				this->keyHeldO = true;
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				if (this->mapSandBlocks == this->mapLevelSandBlocks)
 				{
-					this->audioManager->playSound("you_won");
+					AudioManager::getInstance().playSound("you_won");
 					this->setYouWonActive(true);
 				}
 			}
@@ -608,7 +600,7 @@ void Game::updateInput()
 			if (!this->keyHeldR)
 			{
 				this->keyHeldR = true;
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->setSpawnActive(true);
 			}
 		}
@@ -643,7 +635,7 @@ void Game::updatePressingButtons()
 			this->mouseHeld = true;
 			if (this->menu->getSpriteButtonPlay().getGlobalBounds().contains(this->mousePosView))
 			{
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->menu->getSpriteButtonPlay().setScale(sf::Vector2f(1.f, 1.f));
 
 				this->setGameActive(true);
@@ -651,12 +643,12 @@ void Game::updatePressingButtons()
 			}
 			else if (this->menu->getSpriteFirstButtonSwitch().getGlobalBounds().contains(this->mousePosView))
 			{
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->moveIconLevels(this->selectedLevel, this->menu->getAllIconLevels().size(), 1, 1, 4, sf::Vector2f(204.f, 213.f), sf::Vector2f(558.f, 175.f));
 			}
 			else if (this->menu->getSpriteSecondButtonSwitch().getGlobalBounds().contains(this->mousePosView))
 			{
-				this->audioManager->playSound("button_click");
+				AudioManager::getInstance().playSound("button_click");
 				this->moveIconLevels(1, this->selectedLevel, this->menu->getAllIconLevels().size(), -1, 0, sf::Vector2f(596.f, 213.f), sf::Vector2f(166.f, 175.f));
 			}
 		}
@@ -782,7 +774,7 @@ void Game::updateBlockDestruction()
 
 			this->sandBlocks.erase(this->sandBlocks.begin() + i);
 
-			this->audioManager->playSound("sand_break");
+			AudioManager::getInstance().playSound("sand_break");
 		}
 	}
 }

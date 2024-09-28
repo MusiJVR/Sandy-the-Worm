@@ -10,6 +10,11 @@ AudioManager::~AudioManager()
     this->cleanup();
 }
 
+AudioManager& AudioManager::getInstance() {
+    static AudioManager instance;
+    return instance;
+}
+
 void AudioManager::playMusic(std::string filename, float volume, bool loop)
 {
     if (!this->music.openFromFile(filename)) {
@@ -57,4 +62,5 @@ void AudioManager::cleanup()
     this->stopMusic();
     this->soundBuffers.clear();
     this->sounds.clear();
+    std::cout << "sdads\n";
 }

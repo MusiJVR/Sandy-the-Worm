@@ -1,10 +1,5 @@
 #pragma once
 
-#include <iostream>
-#include <ctime>
-#include <vector>
-#include <sstream>
-
 #include "AudioManager.h"
 #include "Menu.h"
 #include "Worm.h"
@@ -22,8 +17,6 @@ private:
 	sf::Text menuText;
 	sf::Text readyText;
 	sf::Text resetText;
-
-	AudioManager* audioManager;
 
 	Worm* worm;
 
@@ -52,7 +45,7 @@ private:
 
 	void initVariables();
 	void initWindow();
-	void initAudioManager();
+	void initAudio();
 	void initFonts();
 	void initText();
 	void initTexture();
@@ -67,7 +60,6 @@ public:
 	virtual ~Game();
 
 	//Accessors
-	AudioManager* getAudioManager();
 	sf::Vector2f getTextureCenterCoordinates(sf::Sprite sprite);
 	bool getGameActive();
 	void setGameActive(bool value);

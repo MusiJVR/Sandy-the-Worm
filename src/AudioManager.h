@@ -8,13 +8,18 @@
 class AudioManager
 {
 private:
+    AudioManager();
+    ~AudioManager();
+
+    AudioManager(const AudioManager&) = delete;
+    AudioManager& operator=(const AudioManager&) = delete;
+
     sf::Music music;
     std::map<std::string, sf::SoundBuffer> soundBuffers;
     std::vector<std::unique_ptr<sf::Sound>> sounds;
 
 public:
-    AudioManager();
-    virtual ~AudioManager();
+    static AudioManager& getInstance();
 
     void playMusic(std::string filename, float volume, bool loop);
     void stopMusic();
